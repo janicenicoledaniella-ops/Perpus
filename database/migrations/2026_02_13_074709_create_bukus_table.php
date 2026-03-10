@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('penulis');
             $table->string('penerbit');
             $table->year('tahun');
+            $table->string('isbn')->nullable();
+            $table->string('kategori')->nullable();
             $table->integer('stok');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }
