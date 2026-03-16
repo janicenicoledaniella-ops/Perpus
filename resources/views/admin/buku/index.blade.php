@@ -24,7 +24,12 @@
                     <th class="px-4 py-2 border">No</th>
                     <th class="px-4 py-2 border">Judul</th>
                     <th class="px-4 py-2 border">Penulis</th>
+                    <th class="px-4 py-2 border">Penerbit</th>
+                    <th class="px-4 py-2 border">Tahun</th>
+                    <th class="px-4 py-2 border">ISBN</th>
+                    <th class="px-4 py-2 border">Kategori</th>
                     <th class="px-4 py-2 border">Stok</th>
+                    <th class="px-4 py-2 border">Deskripsi</th>
                     <th class="px-4 py-2 border">Aksi</th>
                 </tr>
             </thead>
@@ -34,7 +39,12 @@
                     <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
                     <td class="px-4 py-2 border">{{ $buku->judul }}</td>
                     <td class="px-4 py-2 border">{{ $buku->penulis }}</td>
+                    <td class="px-4 py-2 border">{{ $buku->penerbit }}</td>
+                    <td class="px-4 py-2 border">{{ $buku->tahun }}</td>
+                    <td class="px-4 py-2 border">{{ $buku->isbn }}</td>
+                    <td class="px-4 py-2 border">{{ $buku->kategori }}</td>
                     <td class="px-4 py-2 border">{{ $buku->stok }}</td>
+                     <td class="px-4 py-2 border">{{ $buku->deskripsi }}</td>
                     <td class="px-4 py-2 border">
                         <a href="{{ route('admin.buku.edit', $buku->id) }}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</a>
 

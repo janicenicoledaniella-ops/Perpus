@@ -16,7 +16,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('totalDosen', 'totalMahasiswa'));
     }
 
-    // ===================== DOSEN =====================
+    
     public function dosenIndex()
     {
         $dosens = User::where('email', 'like', '03%@lecture.edu')->get();
@@ -61,7 +61,7 @@ class AdminController extends Controller
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil dihapus');
     }
 
-    // ===================== MAHASISWA =====================
+
     public function mahasiswaIndex()
     {
         $mahasiswas = User::where('email', 'like', '04%@student.edu')->get();
@@ -107,7 +107,7 @@ class AdminController extends Controller
     }
     public function bukuIndex()
     {
-        $bukus = Buku::all(); // ambil semua data buku
+        $bukus = Buku::all(); 
         return view('admin.buku.index', compact('bukus'));
     }
 

@@ -9,7 +9,7 @@ class KatalogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = $request->input('q'); // input pencarian
+        $query = $request->input('q'); 
         $bukus = Buku::query();
 
         if ($query) {

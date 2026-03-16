@@ -11,7 +11,12 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse($bukus as $buku)
             <div class="bg-white p-4 rounded shadow">
-                <h3 class="text-xl font-semibold mb-2">{{ $buku->judul }}</h3>
+                <a href="{{ route('buku.show', $buku->id) }}">
+                @if($buku->cover)
+            <img src="{{ asset('storage/'.$buku->cover) }}" 
+             style="width:120px;height:160px;object-fit:cover;margin-bottom:10px;">
+        @endif
+                <h3 class="text-xl font-semibold mb-2">{{ $buku->judul }}</h3> </a>
                 <p>Penulis: {{ $buku->penulis }}</p>
                 <p>Stok: {{ $buku->stok }}</p>
                 @auth

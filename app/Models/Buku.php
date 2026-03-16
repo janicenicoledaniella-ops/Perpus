@@ -17,6 +17,7 @@ class Buku extends Model
         'isbn',
         'kategori',
         'stok',
-        'deskripsi'
+        'deskripsi',
+        'cover'
     ];
 }

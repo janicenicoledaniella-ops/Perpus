@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
     } elseif (str_starts_with($email, '02') && str_ends_with($email, '@operator.edu')) {
         return redirect()->route('operator.dashboard');
     } else {
-        return redirect()->route('user.dashboard'); // dosen & mahasiswa
+        return redirect('/'); // dosen & mahasiswa
     }
 }
 

@@ -15,13 +15,31 @@ class BukuController extends Controller
 
     public function create()
     {
-        return view('adamin.buku.create');
+        return view('admin.buku.create');
     }
 
     public function store(Request $request)
     {
-        Buku::create($request->all());
-        return redirect('/buku')->with('success', 'Data berhasil ditambahkan');
+          $data = $request->only([
+        'judul',
+        'penulis',
+        'penerbit',
+        'tahun',
+        'isbn',
+        'kategori',
+        'stok',
+        'deskripsi'
+    ]);
+
+    if ($request->hasFile('cover')) {
+        $path = $request->file('cover')->store('covers', 'public');
+        $data['cover'] = $path;
+    }
+
+    Buku::create($data);
+
+    return redirect('/buku')->with('success', 'Data berhasil ditambahkan');
+    
     }
 
     public function edit($id)
@@ -41,5 +59,11 @@ class BukuController extends Controller
     {
         Buku::destroy($id);
         return redirect('/buku')->with('success', 'Data berhasil dihapus');
+    }
+    
+    public function show($id)
+    {
+    $buku = Buku::findOrFail($id);
+    return view('katalog.detail', compact('buku'));
     }
 }
