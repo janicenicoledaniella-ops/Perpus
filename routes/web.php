@@ -12,8 +12,6 @@ use App\Http\Controllers\PeminjamanController;
 Route::get('/', [KatalogController::class, 'index'])->name('katalog.index');
 Route::get('/katalog', [KatalogController::class, 'index'])->name('buku.katalog');
 Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
-Route::get('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])->middleware('auth');
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -72,9 +70,6 @@ Route::middleware('auth')->group(function () {
     })->name('admin.laporan');
 });
 
-Route::get('/admin/peminjaman', [PeminjamanController::class, 'index']);
-Route::get('/admin/approve/{id}', [PeminjamanController::class, 'approve']);
-Route::get('/admin/kembalikan/{id}', [PeminjamanController::class, 'kembalikan']);
 
 Route::middleware(['auth'])->group(function () {
 
