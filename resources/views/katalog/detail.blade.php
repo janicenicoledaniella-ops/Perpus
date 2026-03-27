@@ -6,7 +6,7 @@
     <div class="bg-white p-6 rounded shadow">
 
         @if($buku->cover)
-            <img src="{{ asset($buku->cover) }}" 
+            <img src="{{ asset('storage/' .$buku->cover) }}" 
                  style="width:200px;margin-bottom:20px;">
         @endif
 
