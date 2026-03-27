@@ -4,6 +4,7 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /perpus/public/
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

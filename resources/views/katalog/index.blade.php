@@ -20,7 +20,7 @@
                 <p>Penulis: {{ $buku->penulis }}</p>
                 <p>Stok: {{ $buku->stok }}</p>
                 @auth
-                    <a href="#" class="bg-green-500 text-white px-3 py-1 rounded mt-2 inline-block">Pinjam</a>
+                    <a href="{{ url('pinjam/'.$buku->id) }}" class="bg-green-500 text-white px-3 py-1 rounded mt-2 inline-block">Pinjam</a>
                 @else
                     <a href="{{ route('login') }}" class="bg-gray-500 text-white px-3 py-1 rounded mt-2 inline-block">Login untuk pinjam</a>
                 @endauth
