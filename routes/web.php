@@ -11,7 +11,7 @@ use App\Http\Controllers\PeminjamanController;
 
 Route::get('/', [KatalogController::class, 'index'])->name('katalog.index');
 Route::get('/katalog', [KatalogController::class, 'index'])->name('buku.katalog');
-Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
+Route::get('/buku/detail/{id}', [BukuController::class, 'show'])->name('buku.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/buku/{id}', [AdminController::class, 'bukuDestroy'])->name('admin.buku.destroy');
 
 
-Route::resource('buku', BukuController::class);
+Route::resource('buku', BukuController::class)->except(['show']);
 });
 
 
