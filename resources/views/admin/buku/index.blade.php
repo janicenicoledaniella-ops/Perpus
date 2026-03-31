@@ -16,7 +16,7 @@
         </a>
     </div>
 
-    <!-- Tabel Daftar Buku -->
+
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border">
             <thead>

@@ -11,7 +11,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse($bukus as $buku)
             <div class="bg-white p-4 rounded shadow">
-                <a href="{{ route('buku.show', $buku->id) }}">
+                <a href="{{ route('buku.show', ['id' => $buku->isbn]) }}">
                 @if($buku->cover)
             <img src="{{ asset('storage/'.$buku->cover) }}" 
              style="width:120px;height:160px;object-fit:cover;margin-bottom:10px;">
