@@ -1,6 +1,6 @@
 <h2>Edit Buku</h2>
 
-<form action="/admin/buku/{{ $data->id }}" method="POST">
+<form action="{{ route('admin.buku.update', $data->id) }}" method="POST">
     @csrf
     @method('PUT')
 

@@ -65,5 +65,8 @@ class BukuController extends Controller
     {
     $buku = Buku::where('isbn',$id)->firstOrFail();
     return view('katalog.detail', compact('buku'));
+
+        $buku = Buku::where('isbn', $id)->firstOrFail();
+        return view('katalog.detail', compact('buku'));
     }
 }
