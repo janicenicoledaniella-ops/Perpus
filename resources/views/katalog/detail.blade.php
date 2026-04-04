@@ -29,9 +29,10 @@
         <br>
 
         @auth
-            <button style="background:green;color:white;padding:8px 15px;">
-                Pinjam Buku
-            </button>
+        <a href="{{ route('peminjaman.pinjam', ['id'=> $buku->isbn]) }}" 
+        style="background:green;color:white;padding:8px 15px;display:inline-block;">
+        Pinjam Buku
+         </a>
         @else
             <a href="{{ route('login') }}" 
                style="background:gray;color:white;padding:8px 15px;">

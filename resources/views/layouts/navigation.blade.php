@@ -12,10 +12,41 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+
+                {{-- KATALOG --}}
+                <x-nav-link href="{{ url('/katalog') }}" :active="request()->is('katalog')">
+                    Katalog
+                </x-nav-link>
+
+                @auth
+                <x-nav-link :href="route('peminjaman.index')" :active="request()->routeIs('peminjaman.index')">
+                    Peminjaman Saya
+                </x-nav-link>
+                @endauth
+
+                @auth
+                @php
+                    $email = Auth::user()->email;
+                @endphp
+
+                @if(str_starts_with($email, '01'))
+                    <x-nav-link href="{{ route('admin.dashboard') }}">
+                        Dashboard
                     </x-nav-link>
-                </div>
+
+                @elseif(str_contains($email, 'dosen'))
+                    <x-nav-link href="{{ route('dosen.dashboard') }}">
+                        Dashboard
+                    </x-nav-link>
+
+                @else
+                    <x-nav-link href="{{ route('mahasiswa.dashboard') }}">
+                        Dashboard
+                    </x-nav-link>
+                @endif
+            @endauth
+
+            </div>
             </div>
 
             <!-- Settings Dropdown -->

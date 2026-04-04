@@ -20,4 +20,11 @@ class Buku extends Model
         'deskripsi',
         'cover'
     ];
+     public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class);
+    }
+    protected $primaryKey = 'isbn';
+public $incrementing = false;
+protected $keyType = 'string';
 }

@@ -63,7 +63,7 @@ class BukuController extends Controller
     
     public function show($id)
     {
-    $buku = Buku::findOrFail($id);
+    $buku = Buku::where('isbn',$id)->firstOrFail();
     return view('katalog.detail', compact('buku'));
     }
 }

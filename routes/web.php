@@ -1,26 +1,38 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KatalogController;
-use App\Http\Controllers\PeminjamanController;
-
 
 Route::get('/', [KatalogController::class, 'index'])->name('katalog.index');
 Route::get('/katalog', [KatalogController::class, 'index'])->name('buku.katalog');
 Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect('/katalog');
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {
         return "Halaman Profile";
     })->name('profile.edit');
+});
+
+Route::middleware(['auth'])->prefix('dosen')->group(function () {
+    Route::get('/', function () {
+        return view('dosen.dashboard');
+    })->name('dosen.dashboard');
+});
+
+Route::middleware(['auth'])->prefix('mahasiswa')->group(function () {
+    Route::get('/', function () {
+        return view('mahasiswa.dashboard');
+    })->name('mahasiswa.dashboard');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
@@ -58,9 +70,6 @@ Route::middleware(['auth'])->prefix('operator')->group(function () {
     Route::delete('/akun/{id}', [OperatorController::class, 'akunDestroy'])->name('operator.akun.destroy');
 });
 
-Route::middleware(['auth'])->prefix('user')->group(function () {
-    Route::get('/', [UserController::class, 'dashboard'])->name('user.dashboard');
-});
 
 Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
 
@@ -73,7 +82,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/admin/buku', [AdminController::class, 'bukuIndex'])->name('admin.buku.index');
+   // Route::get('/admin/buku', [AdminController::class, 'bukuIndex'])->name('admin.buku.index');
     
     Route::get('/admin/buku/create', [AdminController::class, 'bukuCreate'])->name('admin.buku.create');
     Route::post('/admin/buku', [AdminController::class, 'bukuStore'])->name('admin.buku.store');
@@ -87,5 +96,17 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('buku', BukuController::class);
 });
 
+Route::middleware('auth')->group(function () {
+
+    Route::get('/peminjaman', [PeminjamanController::class, 'index'])
+        ->name('peminjaman.index');
+
+    Route::post('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])
+        ->name('peminjaman.pinjam');
+
+    Route::post('/kembali/{id}', [PengembalianController::class, 'kembali'])
+        ->name('peminjaman.kembali');
+
+});
 
 require __DIR__.'/auth.php';

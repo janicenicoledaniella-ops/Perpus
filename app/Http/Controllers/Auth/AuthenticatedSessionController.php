@@ -24,21 +24,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-       $request->authenticate(); // otomatis cek email/password
+        $request->authenticate(); 
 
-    $request->session()->regenerate();
-
-    $user = Auth::user();
-    $email = $user->email;
-
-    // redirect sesuai role
-    if (str_starts_with($email, '01') && str_ends_with($email, '@staff.edu')) {
-        return redirect()->route('admin.dashboard');
-    } elseif (str_starts_with($email, '02') && str_ends_with($email, '@operator.edu')) {
-        return redirect()->route('operator.dashboard');
-    } else {
-        return redirect('/'); // dosen & mahasiswa
-    }
+        $request->session()->regenerate();
+    
+        return redirect('/katalog');
 }
 
     /**
