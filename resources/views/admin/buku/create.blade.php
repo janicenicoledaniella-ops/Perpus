@@ -1,6 +1,6 @@
 <h2>Tambah Buku</h2>
 
-<form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.buku.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     Judul: <input type="text" name="judul"><br><br>

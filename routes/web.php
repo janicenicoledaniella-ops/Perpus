@@ -54,7 +54,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::delete('/mahasiswa/{id}', [AdminController::class, 'mahasiswaDestroy'])->name('admin.mahasiswa.destroy');
 
     Route::get('/buku', [AdminController::class, 'bukuIndex'])->name('admin.buku.index');
+    Route::get('/buku', [AdminController::class, 'bukuIndex'])->name('admin.buku.index');
+    Route::get('/buku/create', [AdminController::class, 'bukuCreate'])->name('admin.buku.create');
+    Route::post('/buku', [AdminController::class, 'bukuStore'])->name('admin.buku.store');
 
+    Route::get('/buku/{id}/edit', [AdminController::class, 'bukuEdit'])->name('admin.buku.edit');
+    Route::put('/buku/{id}', [AdminController::class, 'bukuUpdate'])->name('admin.buku.update');
+    Route::delete('/buku/{id}', [AdminController::class, 'bukuDestroy'])->name('admin.buku.destroy');
     
     Route::get('/laporan', [AdminController::class, 'laporanIndex'])->name('admin.laporan.index');
 });
@@ -80,21 +86,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth'])->group(function () {
 
-   // Route::get('/admin/buku', [AdminController::class, 'bukuIndex'])->name('admin.buku.index');
-    
-    Route::get('/admin/buku/create', [AdminController::class, 'bukuCreate'])->name('admin.buku.create');
-    Route::post('/admin/buku', [AdminController::class, 'bukuStore'])->name('admin.buku.store');
-
-    Route::get('/admin/buku/{id}/edit', [AdminController::class, 'bukuEdit'])->name('admin.buku.edit');
-    Route::put('/admin/buku/{id}', [AdminController::class, 'bukuUpdate'])->name('admin.buku.update');
-
-    Route::delete('/admin/buku/{id}', [AdminController::class, 'bukuDestroy'])->name('admin.buku.destroy');
-
-
-Route::resource('buku', BukuController::class)->except(['show']);
-});
 
 Route::middleware('auth')->group(function () {
 

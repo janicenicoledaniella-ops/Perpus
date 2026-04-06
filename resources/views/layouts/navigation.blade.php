@@ -19,9 +19,15 @@
                 </x-nav-link>
 
                 @auth
-                <x-nav-link :href="route('peminjaman.index')" :active="request()->routeIs('peminjaman.index')">
-                    Peminjaman Saya
-                </x-nav-link>
+                @php
+                    $email = Auth::user()->email;
+                @endphp
+
+                @if(!str_starts_with($email, '01')) 
+                    <x-nav-link :href="route('peminjaman.index')" :active="request()->routeIs('peminjaman.index')">
+                        Peminjaman Saya
+                    </x-nav-link>
+                @endif
                 @endauth
 
                 @auth

@@ -46,9 +46,9 @@
                     <td class="px-4 py-2 border">{{ $buku->stok }}</td>
                      <td class="px-4 py-2 border">{{ $buku->deskripsi }}</td>
                     <td class="px-4 py-2 border">
-                        <a href="{{ route('admin.buku.edit', $buku->id) }}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</a>
+                        <a href="{{ route('admin.buku.edit', ['id' => $buku->isbn]) }}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</a>
 
-                        <form action="{{ route('admin.buku.destroy', $buku->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus buku ini?');">
+                        <form action="{{ route('admin.buku.destroy', $buku->isbn) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus buku ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Hapus</button>
