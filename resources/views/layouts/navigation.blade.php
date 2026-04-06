@@ -19,11 +19,9 @@
                 </x-nav-link>
 
                 @auth
-                    @if(in_array(auth()->user()->role, ['mahasiswa', 'dosen']))
-                        <x-nav-link :href="route('peminjaman.index')" :active="request()->routeIs('peminjaman.index')">
-                            Peminjaman Saya
-                        </x-nav-link>
-                    @endif
+                <x-nav-link :href="route('peminjaman.index')" :active="request()->routeIs('peminjaman.index')">
+                    Peminjaman Saya
+                </x-nav-link>
                 @endauth
 
                 @auth
