@@ -22,7 +22,7 @@ class Buku extends Model
     ];
      public function peminjaman()
     {
-        return $this->hasMany(Peminjaman::class);
+        return $this->hasMany(Peminjaman::class, 'buku_id', 'isbn');
     }
     protected $primaryKey = 'isbn';
 public $incrementing = false;

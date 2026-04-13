@@ -8,13 +8,23 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-
-    <!-- Tombol Tambah Buku -->
     <div class="mb-4">
+        
         <a href="{{ route('admin.buku.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Tambah Buku
         </a>
     </div>
+    @if(session('success'))
+        <div style="background:lightgreen;padding:10px;margin-bottom:10px;border-radius:4px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div style="background:pink;padding:10px;margin-bottom:10px;border-radius:4px;">
+            {{ session('error') }}
+        </div>
+    @endif
 
 
     <div class="overflow-x-auto">

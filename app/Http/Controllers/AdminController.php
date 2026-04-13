@@ -74,8 +74,9 @@ class AdminController extends Controller
 
     public function dosenDestroy($id)
     {
-        User::destroy($id);
-        return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil dihapus');
+       User::destroy($id);
+       return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil dihapus');
+
     }
 
 
@@ -186,7 +187,7 @@ class AdminController extends Controller
             $path = $request->file('cover')->store('covers', 'public');
             $data['cover'] = $path;
         }
-        Buku::create($request->all());
+        Buku::create($data);
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan');
     }
 
@@ -227,8 +228,16 @@ class AdminController extends Controller
 
     public function bukuDestroy($id)
     {
-        Buku::destroy($id);
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus');
+        $buku = Buku::findOrFail($id);
+
+        $sedangDipinjam = $buku->peminjaman()->whereIn('status', ['dipinjam'])->exists();
+        
+        if ($sedangDipinjam) {
+            return redirect()->route('admin.buku.index')->with('error', 'Buku tidak dapat dihapus karena sedang dipinjam.');
+        }
+
+        $buku->delete();
+        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.'); 
+        }
     }
-}
 

@@ -29,14 +29,18 @@
         <br>
 
         @auth
-        <a href="{{ route('peminjaman.pinjam', ['id'=> $buku->isbn]) }}" 
-        style="background:green;color:white;padding:8px 15px;display:inline-block;">
-        Pinjam Buku
-         </a>
+            @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
+                {{-- admin, tidak bisa pinjam --}}
+            @else
+                <a href="{{ route('peminjaman.pinjam', ['id'=> $buku->isbn]) }}" 
+                style="background:green;color:white;padding:8px 15px;display:inline-block;">
+                    Pinjam Buku
+                </a>
+            @endif
         @else
             <a href="{{ route('login') }}" 
-               style="background:gray;color:white;padding:8px 15px;">
-               Login untuk Pinjam
+            style="background:gray;color:white;padding:8px 15px;">
+            Login untuk Pinjam
             </a>
         @endauth
 

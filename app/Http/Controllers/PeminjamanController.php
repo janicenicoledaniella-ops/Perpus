@@ -22,6 +22,10 @@ class PeminjamanController extends Controller
 
 public function pinjam($id)
 {
+    $user = Auth::user();
+    if (!str_ends_with($user->email, '@student.edu') && !str_ends_with($user->email, '@lecture.edu')) {
+        return back()->with('error', 'Admin tidak dapat meminjam buku.');
+    }
     $buku = Buku::where('isbn', $id)->first();
 
     if (!$buku) {
