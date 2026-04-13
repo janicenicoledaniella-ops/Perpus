@@ -37,9 +37,14 @@ class AdminController extends Controller
         ], [
             'name.required'     => 'Nama tidak boleh kosong.',
             'email.required'    => 'NIDN tidak boleh kosong.',
+            'email.unique'      => 'NIDN sudah digunakan.',
             'password.required' => 'Password tidak boleh kosong.',
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
+        $emailLengkap = '03' . $request->email . '@lecture.edu';
+        if (User::where('email', $emailLengkap)->exists()) {
+            return back()->withErrors(['email' => 'NIDN sudah terdaftar.'])->withInput();
+        }
         User::create([
             'name' => $request->name,
             'email' => '03'.$request->email.'@lecture.edu',
@@ -63,6 +68,10 @@ class AdminController extends Controller
             'name.required'  => 'Nama tidak boleh kosong.',
             'email.required' => 'NIDN tidak boleh kosong.',
         ]);
+        $emailLengkap = '03' . $request->email . '@lecture.edu';
+        if (User::where('email', $emailLengkap)->where('id', '!=', $id)->exists()) {
+            return back()->withErrors(['email' => 'NIDN sudah terdaftar.'])->withInput();
+        }
         $dosen = User::findOrFail($id);
         $dosen->update([
             'name' => $request->name,
@@ -100,9 +109,14 @@ class AdminController extends Controller
         ], [
             'name.required'     => 'Nama tidak boleh kosong.',
             'email.required'    => 'NIM tidak boleh kosong.',
+            'email.unique'      => 'NIM sudah digunakan.',
             'password.required' => 'Password tidak boleh kosong.',
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
+        $emailLengkap = '04' . $request->email . '@student.edu';
+        if (User::where('email', $emailLengkap)->exists()) {
+            return back()->withErrors(['email' => 'NIM sudah terdaftar.'])->withInput();
+        }
         User::create([
             'name' => $request->name,
             'email' => '04'.$request->email.'@student.edu',
@@ -126,6 +140,11 @@ class AdminController extends Controller
             'name.required'  => 'Nama tidak boleh kosong.',
             'email.required' => 'NIM tidak boleh kosong.',
         ]);
+        $emailLengkap = '04' . $request->email . '@student.edu';
+
+        if (User::where('email', $emailLengkap)->where('id', '!=', $id)->exists()) {
+            return back()->withErrors(['email' => 'NIM sudah terdaftar.'])->withInput();
+        }
         $mahasiswa = User::findOrFail($id);
         $mahasiswa->update([
             'name' => $request->name,
