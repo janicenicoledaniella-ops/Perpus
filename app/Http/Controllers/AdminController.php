@@ -5,18 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Buku;
+use App\Models\Denda;
+use App\Models\Peminjaman;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        $totalDosen = User::where('email', 'like', '03%@lecture.edu')->count();
-        $totalMahasiswa = User::where('email', 'like', '04%@student.edu')->count();
+    $totalDosen = User::where('email', 'like', '03%@lecture.edu')->count();
+    $totalMahasiswa = User::where('email', 'like', '04%@student.edu')->count();
 
-        return view('admin.dashboard', compact('totalDosen', 'totalMahasiswa'));
+    $totalBukuDipinjam = Peminjaman::where('status', 'dipinjam')->count();
+    $totalDenda = Denda::sum('total_denda');
+
+    return view('admin.dashboard', compact(
+        'totalDosen',
+        'totalMahasiswa',
+        'totalBukuDipinjam',
+        'totalDenda'
+    ));
     }
 
-    
     public function dosenIndex()
     {
         $dosens = User::where('email', 'like', '03%@lecture.edu')->get();
@@ -87,7 +96,6 @@ class AdminController extends Controller
        return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil dihapus');
 
     }
-
 
     public function mahasiswaIndex()
     {
@@ -258,5 +266,43 @@ class AdminController extends Controller
         $buku->delete();
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.'); 
         }
+
+    public function laporan()
+    {
+        return view('admin.laporan.index');
     }
 
+    public function laporanFilter(Request $request)
+    {
+        $jenis = $request->jenis;
+
+        if ($jenis == 'semua') {
+            return view('admin.laporan.index', [
+                'bukus' => Buku::all(),
+                'peminjaman' => Peminjaman::with('user','buku')->get(),
+                'pengembalian' => Peminjaman::with('user','buku')
+                    ->where('status', 'dikembalikan')->get(),
+                'denda' => Denda::with('user','peminjaman.buku')
+                    ->where('total_denda','>',0)->get(),
+                'jenis' => 'semua'
+            ]);
+        }
+
+        if ($jenis == 'buku') {
+            $data = Buku::all();
+        } 
+        elseif ($jenis == 'peminjaman') {
+            $data = Peminjaman::with('user','buku')->get();
+        } 
+        elseif ($jenis == 'pengembalian') {
+            $data = Peminjaman::with('user','buku')
+                ->where('status', 'dikembalikan')->get();
+        } 
+        elseif ($jenis == 'denda') {
+            $data = Denda::with('user','peminjaman.buku')
+                ->where('total_denda','>',0)->get();
+        }
+
+        return view('admin.laporan.index', compact('data','jenis'));
+    }
+}

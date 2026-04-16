@@ -39,6 +39,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
+    Route::get('/laporan', [AdminController::class, 'laporan'])->name('admin.laporan.index');
+    Route::post('/laporan/filter', [AdminController::class, 'laporanFilter'])->name('admin.laporan.filter');
+
     Route::get('/dosen', [AdminController::class, 'dosenIndex'])->name('admin.dosen.index');
     Route::get('/dosen/create', [AdminController::class, 'dosenCreate'])->name('admin.dosen.create');
     Route::post('/dosen', [AdminController::class, 'dosenStore'])->name('admin.dosen.store');
@@ -61,8 +64,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/buku/{id}/edit', [AdminController::class, 'bukuEdit'])->name('admin.buku.edit');
     Route::put('/buku/{id}', [AdminController::class, 'bukuUpdate'])->name('admin.buku.update');
     Route::delete('/buku/{id}', [AdminController::class, 'bukuDestroy'])->name('admin.buku.destroy');
-    
-    Route::get('/laporan', [AdminController::class, 'laporanIndex'])->name('admin.laporan.index');
 });
 
 Route::middleware(['auth'])->prefix('operator')->group(function () {
@@ -76,17 +77,7 @@ Route::middleware(['auth'])->prefix('operator')->group(function () {
     Route::delete('/akun/{id}', [OperatorController::class, 'akunDestroy'])->name('operator.akun.destroy');
 });
 
-
 Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/laporan', function() {
-        return "Halaman Laporan Admin (sementara)";
-    })->name('admin.laporan');
-});
-
-
-
 
 Route::middleware('auth')->group(function () {
 
@@ -98,6 +89,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/kembali/{id}', [PengembalianController::class, 'kembali'])
         ->name('peminjaman.kembali');
+    
+    Route::get('/denda', [DendaController::class, 'index'])
+        ->name('denda.index');
+
+    Route::post('/denda/{id}/bayar', [DendaController::class, 'bayar'])
+        ->name('denda.bayar');
+
 
 });
 

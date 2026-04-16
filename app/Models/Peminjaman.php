@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User; 
 
 class Peminjaman extends Model
 {
@@ -16,8 +17,19 @@ class Peminjaman extends Model
         'tanggal_kembali',
         'status'
     ];
-     public function buku()
+
+    public function buku()
     {
         return $this->belongsTo(Buku::class, 'buku_id', 'isbn');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function denda()
+    {
+        return $this->hasOne(Denda::class);
     }
 }
