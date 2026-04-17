@@ -103,6 +103,7 @@ function toggleFilter() {
     <th>Judul Buku</th>
     <th>ISBN</th>
     <th>Tanggal Kembali</th>
+    <th>Status</th>
 </tr>
 @foreach($pengembalian as $p)
 <tr>
@@ -111,6 +112,17 @@ function toggleFilter() {
     <td>{{ $p->buku->judul ?? '-' }}</td>
     <td>{{ $p->buku->isbn ?? '-' }}</td>
     <td>{{ $p->tanggal_kembali }}</td>
+    <td>
+    @if($p->denda)
+        @if($p->denda->status == 'lunas')
+            Lunas
+        @else
+            Belum Lunas
+        @endif
+    @else
+        Tidak Ada Denda
+    @endif
+</td>
 </tr>
 @endforeach
 </table>
@@ -118,14 +130,32 @@ function toggleFilter() {
 <br>
 
 <h3>Denda</h3>
+
+@php $total = 0; @endphp
+
 <table border="1" cellpadding="10">
 <tr>
     <th>Nama</th>
     <th>ID</th>
-    <th>Judul Buku</th>
-    <th>ISBN</th>
     <th>Total Denda</th>
 </tr>
+
+@foreach($denda as $d)
+<tr>
+    <td>{{ $d->user->name }}</td>
+    <td>{{ explode('@', $d->user->email)[0] }}</td>
+    <td>Rp {{ $d->total_denda }}</td>
+</tr>
+
+@php $total += $d->total_denda; @endphp
+@endforeach
+
+<tr>
+    <td colspan="2"><b>Total Keseluruhan</b></td>
+    <td><b>Rp {{ $total }}</b></td>
+</tr>
+</table>
+
 @foreach($denda as $d)
 <tr>
     <td>{{ $d->user->name }}</td>
@@ -189,7 +219,9 @@ function toggleFilter() {
     <th>Judul Buku</th>
     <th>ISBN</th>
     <th>Tanggal Kembali</th>
+    <th>Status</th>
 </tr>
+
 @foreach($data as $p)
 <tr>
     <td>{{ $p->user->name }}</td>
@@ -197,6 +229,20 @@ function toggleFilter() {
     <td>{{ $p->buku->judul ?? '-' }}</td>
     <td>{{ $p->buku->isbn ?? '-' }}</td>
     <td>{{ $p->tanggal_kembali }}</td>
+
+    <!-- TAMBAH INI -->
+    <td>
+        @if($p->denda)
+            @if($p->denda->status == 'lunas')
+                Lunas
+            @else
+                Belum Lunas
+            @endif
+        @else
+            Tidak Ada Denda
+        @endif
+    </td>
+
 </tr>
 @endforeach
 </table>
@@ -204,23 +250,30 @@ function toggleFilter() {
 @elseif($jenis == 'denda')
 
 <h2>Laporan Denda</h2>
+
+@php $total = 0; @endphp
+
 <table border="1" cellpadding="10">
 <tr>
     <th>Nama</th>
     <th>ID</th>
-    <th>Judul Buku</th>
-    <th>ISBN</th>
     <th>Total Denda</th>
 </tr>
+
 @foreach($data as $d)
 <tr>
     <td>{{ $d->user->name }}</td>
     <td>{{ explode('@', $d->user->email)[0] }}</td>
-    <td>{{ $d->peminjaman->buku->judul ?? '-' }}</td>
-    <td>{{ $d->peminjaman->buku->isbn ?? '-' }}</td>
     <td>Rp {{ $d->total_denda }}</td>
 </tr>
+
+@php $total += $d->total_denda; @endphp
 @endforeach
+
+<tr>
+    <td colspan="2"><b>Total Keseluruhan</b></td>
+    <td><b>Rp {{ $total }}</b></td>
+</tr>
 </table>
 
 @endif

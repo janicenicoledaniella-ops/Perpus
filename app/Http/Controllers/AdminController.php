@@ -279,11 +279,18 @@ class AdminController extends Controller
         if ($jenis == 'semua') {
             return view('admin.laporan.index', [
                 'bukus' => Buku::all(),
+
                 'peminjaman' => Peminjaman::with('user','buku')->get(),
-                'pengembalian' => Peminjaman::with('user','buku')
-                    ->where('status', 'dikembalikan')->get(),
-                'denda' => Denda::with('user','peminjaman.buku')
-                    ->where('total_denda','>',0)->get(),
+
+                'pengembalian' => Peminjaman::with('user','buku','denda')
+                    ->where('status', 'dikembalikan')
+                    ->get(),
+
+                'denda' => Denda::with('user')
+                    ->where('total_denda','>',0)
+                    ->where('status','lunas')
+                    ->get(),
+
                 'jenis' => 'semua'
             ]);
         }
@@ -295,12 +302,13 @@ class AdminController extends Controller
             $data = Peminjaman::with('user','buku')->get();
         } 
         elseif ($jenis == 'pengembalian') {
-            $data = Peminjaman::with('user','buku')
+            $data = Peminjaman::with('user','buku','denda')
                 ->where('status', 'dikembalikan')->get();
         } 
         elseif ($jenis == 'denda') {
-            $data = Denda::with('user','peminjaman.buku')
-                ->where('total_denda','>',0)->get();
+            $data = Denda::with('user', 'peminjaman.buku')
+                ->where('total_denda', '>', 0)
+                ->get(); 
         }
 
         return view('admin.laporan.index', compact('data','jenis'));
