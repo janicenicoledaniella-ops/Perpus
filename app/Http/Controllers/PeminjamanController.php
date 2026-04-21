@@ -18,7 +18,46 @@ class PeminjamanController extends Controller
 
     return view('peminjaman.index', compact('peminjaman'));
 }
-    
+    public function dashboardUser()
+{
+    $data = Peminjaman::with('buku')
+        ->where('user_id', Auth::id())
+        ->where('status', 'dipinjam')
+        ->get();
+
+    return view('dashboard.user', compact('data'));
+}
+
+public function dashboardMahasiswa()
+{
+    $query = Peminjaman::with('buku')
+        ->where('user_id', Auth::id())
+        ->where('status', 'dipinjam');
+
+    $total = $query->count();
+
+    $telat = $query->get()->filter(function ($item) {
+        return now()->gt($item->tanggal_jatuh_tempo);
+    })->count();
+
+    $denda = 0;
+    foreach ($query->get() as $item) {
+        if (now()->gt($item->tanggal_jatuh_tempo)) {
+            $hari = now()->diffInDays($item->tanggal_jatuh_tempo);
+            $denda += $hari * 2000;
+        }
+    }
+
+    // ambil 3 buku terbaru
+    $data = $query->latest()->take(3)->get();
+
+    return view('mahasiswa.dashboard', compact('data', 'total', 'telat', 'denda'));
+}
+
+public function dashboardDosen()
+{
+    return $this->dashboardMahasiswa();
+}
 
 public function pinjam($id)
 {
