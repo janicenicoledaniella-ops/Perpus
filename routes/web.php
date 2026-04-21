@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [KatalogController::class, 'index'])->name('katalog.index');
 Route::get('/katalog', [KatalogController::class, 'index'])->name('buku.katalog');
@@ -18,9 +19,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', function () {
-        return "Halaman Profile";
-    })->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::middleware(['auth'])->prefix('dosen')->group(function () {
