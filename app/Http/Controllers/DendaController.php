@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Denda;
 
 class DendaController extends Controller
 {
     public function index()
-    {
-        $dendas = Denda::where('user_id', auth()->id())->get();
+    {$dendas = Denda::where('user_id', Auth::id())->get();
+        
 
         return view('denda.index', compact('dendas'));
     }

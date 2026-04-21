@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
+use App\Http\Controllers\DendaController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
@@ -25,15 +26,13 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('dosen')->group(function () {
-    Route::get('/', function () {
-        return view('dosen.dashboard');
-    })->name('dosen.dashboard');
+    Route::get('/', [PeminjamanController::class, 'dashboardDosen'])
+        ->name('dosen.dashboard');
 });
 
 Route::middleware(['auth'])->prefix('mahasiswa')->group(function () {
-    Route::get('/', function () {
-        return view('mahasiswa.dashboard');
-    })->name('mahasiswa.dashboard');
+    Route::get('/', [PeminjamanController::class, 'dashboardMahasiswa'])
+        ->name('mahasiswa.dashboard');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
