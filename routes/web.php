@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
+use App\Http\Controllers\DendaController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OperatorController;
