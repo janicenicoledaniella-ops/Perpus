@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+<div class="max-w-xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tambah Buku</h2>
 
     @include('components.form-errors')
