@@ -4,8 +4,14 @@
 <div class="max-w-5xl mx-auto py-6">
 
     <h2 class="text-xl font-bold mb-4">Buku yang Sedang Dipinjam</h2>
+@if(session('success_denda'))
+    <div style="background:red;color:white;padding:10px;margin-bottom:10px;">
+        {{ session('success_denda') }}
+    </div>
+@endif
+
 @if(session('success'))
-    <div style="background:lightgreen;padding:10px;margin-bottom:10px;">
+    <div style="background:green;color:white;padding:10px;margin-bottom:10px;">
         {{ session('success') }}
     </div>
 @endif
@@ -54,11 +60,11 @@
             @endif
 
             {{-- Tombol Kembalikan --}}
-            <form action="{{ route('peminjaman.kembali', $item->id) }}" method="POST">
+            <form action="{{ route('kembali', $item->id) }}" method="POST">
                 @csrf
-                <button style="background:red;color:white;padding:5px;margin-top:5px;">
-                    Kembalikan
-                </button>
+            <button style="background:red;color:white;padding:5px;margin-top:5px;">
+             Kembalikan
+            </button>
             </form>
 
         </div>

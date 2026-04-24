@@ -24,4 +24,23 @@ class Denda extends Model
     {
         return $this->belongsTo(Peminjaman::class);
     }
+
+    public function index()
+{
+    $denda = Denda::with('peminjaman.buku')
+        ->where('user_id', auth()->id())
+        ->where('status', 'belum_bayar')
+        ->get();
+
+    return view('denda.index', compact('denda'));
+}
+
+public function bayar(Request $request)
+{
+    Denda::where('user_id', auth()->id())
+        ->where('status', 'belum_bayar')
+        ->update(['status' => 'lunas']);
+
+    return redirect()->route('dashboard')->with('success', 'Pembayaran selesai');
+}
 }

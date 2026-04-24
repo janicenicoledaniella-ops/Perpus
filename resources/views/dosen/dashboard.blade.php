@@ -75,5 +75,15 @@
         </a>
     </div>
 
+    @if($denda > 0)
+    <div class="mt-4 text-center">
+    <a href="{{ route('denda.index') }}">
+        <button style="background:red;color:white;padding:10px 20px;">
+            Bayar Denda
+        </button>
+    </a>
+</div>
+@endif
+
 </div>
 @endsection

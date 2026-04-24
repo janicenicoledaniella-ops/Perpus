@@ -1,27 +1,39 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use App\Models\Denda;
+use Illuminate\Support\Facades\Auth;
 
 class DendaController extends Controller
 {
     public function index()
-    {$dendas = Denda::where('user_id', Auth::id())->get();
-        
+    {
+        $dendas = Denda::with('peminjaman.buku')
+            ->where('user_id', Auth::id())
+            ->where('status', 'belum_bayar')
+            ->get();
 
         return view('denda.index', compact('dendas'));
     }
 
-    public function bayar($id)
+    public function bayar()
     {
-        $denda = Denda::findOrFail($id);
+        return redirect()->route('denda.qr');
+    }
 
-        $denda->update([
-            'status' => 'sudah_bayar'
-        ]);
+    public function qr()
+    {
+        return view('denda.qr');
+    }
 
-        return back()->with('success', 'Denda berhasil dibayar');
+    public function selesai()
+    {
+        Denda::where('user_id', Auth::id())
+            ->where('status', 'belum_bayar')
+            ->update(['status' => 'lunas']);
+
+        return view('denda.selesai');
     }
 }

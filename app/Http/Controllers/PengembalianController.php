@@ -10,22 +10,23 @@ use App\Models\Denda;
 class PengembalianController extends Controller
 {
    public function kembali($id)
-    {
+{
     $pinjam = Peminjaman::findOrFail($id);
 
     if ($pinjam->status == 'dikembalikan') {
         return back()->with('error', 'Buku sudah dikembalikan');
     }
 
-    $today = Carbon::now();
-    $batas_kembali = Carbon::parse($pinjam->tanggal_kembali);
+    $today = now();
+    $batas_kembali = \Carbon\Carbon::parse($pinjam->tanggal_jatuh_tempo);
 
-    // CEK TERLAMBAT
+    $denda = 0; // ⬅️ WAJIB ADA (biar ga error)
+
     if ($today->gt($batas_kembali)) {
         $terlambat = $today->diffInDays($batas_kembali);
-        $denda = $terlambat * 1000; // 1000 per hari
+        $denda = $terlambat * 1000;
 
-        Denda::create([
+        \App\Models\Denda::create([
             'user_id' => $pinjam->user_id,
             'peminjaman_id' => $pinjam->id,
             'jumlah_hari_terlambat' => $terlambat,
@@ -39,8 +40,12 @@ class PengembalianController extends Controller
         'tanggal_kembali' => $today
     ]);
 
-    Buku::where('isbn', $pinjam->buku_id)->increment('stok');
+    \App\Models\Buku::where('isbn', $pinjam->buku_id)->increment('stok');
 
-    return back()->with('success', 'Buku berhasil dikembalikan');
+    if ($denda > 0) {
+        return back()->with('success_denda', 'Buku berhasil dikembalikan, Anda memiliki keterlambatan dan denda.');
+    } else {
+        return back()->with('success', 'Buku berhasil dikembalikan');
     }
+}
 }

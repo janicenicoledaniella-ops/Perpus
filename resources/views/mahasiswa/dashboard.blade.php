@@ -67,6 +67,8 @@
 
     </div>
 
+
+
     {{-- 🔗 LINK --}}
     <div class="mt-6">
         <a href="{{ route('peminjaman.index') }}"
@@ -74,6 +76,24 @@
            Lihat Semua Peminjaman
         </a>
     </div>
+
+    <div class="mt-4">
+    <a href="{{ route('denda.index') }}">
+        <button style="background:red;color:white;padding:10px 20px;">
+            Lihat Denda
+        </button>
+    </a>
+</div>
+
+    @if($denda > 0)
+<div class="mt-4 text-center">
+    <a href="{{ route('denda.index') }}">
+        <button style="background:red;color:white;padding:10px 20px;">
+            Bayar Denda
+        </button>
+    </a>
+</div>
+@endif
 
 </div>
 @endsection

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Denda;
+use App\Models\Peminjaman;
 
 class UserController extends Controller
 {
@@ -57,6 +58,33 @@ class UserController extends Controller
     }
     public function dashboard()
 {
-    return view('user.dashboard');
-}
+    $userId = Auth::id();
+
+    // ambil peminjaman user
+    $data = Peminjaman::with('buku')
+        ->where('user_id', $userId)
+        ->latest()
+        ->take(3)
+        ->get();
+
+    // total dipinjam
+    $total = Peminjaman::where('user_id', $userId)
+        ->where('status', 'dipinjam')
+        ->count();
+
+    // total telat
+    $telat = Peminjaman::where('user_id', $userId)
+        ->where('status', 'dipinjam')
+        ->where('tanggal_jatuh_tempo', '<', now())
+        ->count();
+
+    // 🔥 INI YANG PENTING (DENDA)
+    $denda = Denda::where('user_id', $userId)
+        ->where('status','belum_bayar')
+        ->sum('total_denda');
+
+    return view('mahasiswa.dashboard', compact(
+        'data','total','telat','denda'
+    ));
+    }
 }

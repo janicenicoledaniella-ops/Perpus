@@ -87,15 +87,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])
         ->name('peminjaman.pinjam');
 
+    Route::post('/peminjaman/kembali/{id}', [PengembalianController::class, 'kembali'])
+    ->name('peminjaman.kembali');
+
     Route::post('/kembali/{id}', [PengembalianController::class, 'kembali'])
-        ->name('peminjaman.kembali');
-    
-    Route::get('/denda', [DendaController::class, 'index'])
-        ->name('denda.index');
+    ->name('kembali');
 
-    Route::post('/denda/{id}/bayar', [DendaController::class, 'bayar'])
-        ->name('denda.bayar');
-
+    Route::get('/denda', [DendaController::class, 'index'])->name('denda.index');
+    Route::post('/denda/bayar', [DendaController::class, 'bayar'])->name('denda.bayar');
+    Route::get('/denda/qr', [DendaController::class, 'qr'])->name('denda.qr');
+    Route::get('/denda/selesai', [DendaController::class, 'selesai'])->name('denda.selesai');
 
 });
 
