@@ -6,15 +6,34 @@ use Illuminate\Http\Request;
 use App\Models\Peminjaman;
 use App\Models\Buku;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
-    public function index()
+    
+
+public function index()
 {
     $peminjaman = Peminjaman::with('buku')
         ->where('user_id', Auth::id())
         ->where('status', 'dipinjam')
         ->get();
+
+    foreach ($peminjaman as $item) {
+
+        $jatuhTempo = Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay();
+        $sekarang   = now()->startOfDay();
+
+        if ($sekarang->gt($jatuhTempo)) {
+
+            $hari = $jatuhTempo->diffInDays($sekarang);
+
+            $item->denda = $hari * 1000;
+
+        } else {
+            $item->denda = 0;
+        }
+    }
 
     return view('peminjaman.index', compact('peminjaman'));
 }
@@ -41,12 +60,18 @@ public function dashboardMahasiswa()
     })->count();
 
     $denda = 0;
-    foreach ($query->get() as $item) {
-        if (now()->gt($item->tanggal_jatuh_tempo)) {
-            $hari = now()->diffInDays($item->tanggal_jatuh_tempo);
-            $denda += $hari * 2000;
-        }
+   foreach ($query->get() as $item) {
+
+    $jatuhTempo = Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay();
+    $sekarang   = now()->startOfDay();
+
+    if ($sekarang->gt($jatuhTempo)) {
+
+        $hari = $jatuhTempo->diffInDays($sekarang);
+
+        $denda += $hari * 1000;
     }
+}
 
     // ambil 3 buku terbaru
     $data = $query->latest()->take(3)->get();
