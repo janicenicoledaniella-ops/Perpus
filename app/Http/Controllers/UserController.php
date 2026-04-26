@@ -79,9 +79,30 @@ class UserController extends Controller
         ->count();
 
     // 🔥 INI YANG PENTING (DENDA)
-    $denda = Denda::where('user_id', $userId)
-        ->where('status','belum_bayar')
-        ->sum('total_denda');
+    $denda = 0;
+
+$peminjaman = Peminjaman::where('user_id', $userId)
+    ->where('status', 'dipinjam')
+    ->get();
+
+foreach ($peminjaman as $item) {
+
+    if (!$item->tanggal_jatuh_tempo) continue;
+
+    $jatuh = \Carbon\Carbon::parse($item->tanggal_jatuh_tempo);
+    $now = now();
+
+    if ($now->gt($jatuh)) {
+
+        $menit = $jatuh->diffInMinutes($now);
+
+        if ($menit <= 0) {
+            $menit = 1;
+        }
+
+        $denda += $menit * 1000;
+    }
+}
 
     return view('mahasiswa.dashboard', compact(
         'data','total','telat','denda'
