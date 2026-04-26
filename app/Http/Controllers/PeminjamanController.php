@@ -102,7 +102,7 @@ public function pinjam($id)
             'user_id' => Auth::id(),
             'buku_id' => $buku->isbn, 
             'tanggal_pinjam' => now(),
-            'tanggal_jatuh_tempo' => now()->addDays(7),
+            'tanggal_jatuh_tempo' => now()->addMinutes(1),
             'status' => 'dipinjam'
         ]);
 
@@ -110,7 +110,7 @@ public function pinjam($id)
 
       return redirect()->route('katalog.index')
     ->with('success', 'Buku berhasil dipinjam')
-    ->with('jatuh_tempo', now()->addDays(7)->format('d-m-Y'))
+    ->with('jatuh_tempo', now()->addMinutes(1)->format('d-m-Y'))
     ->with('denda', 1000);
     }
 
