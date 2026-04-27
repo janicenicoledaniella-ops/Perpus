@@ -273,44 +273,57 @@ class AdminController extends Controller
     }
 
     public function laporanFilter(Request $request)
-    {
-        $jenis = $request->jenis;
+{
+    $jenis = $request->jenis;
 
-        if ($jenis == 'semua') {
-            return view('admin.laporan.index', [
-                'bukus' => Buku::all(),
+    if ($jenis == 'semua') {
+        return view('admin.laporan.index', [
+            'bukus' => Buku::all(),
 
-                'peminjaman' => Peminjaman::with('user','buku')->get(),
+            'peminjaman' => Peminjaman::with('user','buku')->get(),
 
-                'pengembalian' => Peminjaman::with('user','buku','denda')
-                    ->where('status', 'dikembalikan')
-                    ->get(),
+            // ✅ HANYA YANG SUDAH DIKEMBALIKAN
+            'pengembalian' => Peminjaman::with('user','buku','denda')
+                ->where('status', 'dikembalikan')
+                ->get(),
 
-                'denda' => Denda::with('user')
-                    ->where('total_denda','>',0)
-                    ->where('status','lunas')
-                    ->get(),
+            // ✅ HANYA DENDA YANG SUDAH LUNAS
+            'denda' => Denda::with('user','peminjaman.buku')
+                ->where('status','lunas')
+                ->where('total_denda','>',0)
+                ->get(),
 
-                'jenis' => 'semua'
-            ]);
-        }
-
-        if ($jenis == 'buku') {
-            $data = Buku::all();
-        } 
-        elseif ($jenis == 'peminjaman') {
-            $data = Peminjaman::with('user','buku')->get();
-        } 
-        elseif ($jenis == 'pengembalian') {
-            $data = Peminjaman::with('user','buku','denda')
-                ->where('status', 'dikembalikan')->get();
-        } 
-        elseif ($jenis == 'denda') {
-            $data = Denda::with('user', 'peminjaman.buku')
-                ->where('total_denda', '>', 0)
-                ->get(); 
-        }
-
-        return view('admin.laporan.index', compact('data','jenis'));
+            'jenis' => 'semua'
+        ]);
     }
+
+    // =========================
+
+    if ($jenis == 'buku') {
+        $data = Buku::all();
+    } 
+
+    elseif ($jenis == 'peminjaman') {
+        $data = Peminjaman::with('user','buku')->get();
+    } 
+
+    elseif ($jenis == 'pengembalian') {
+
+        // ✅ SEMUA PENGEMBALIAN MASUK
+        $data = Peminjaman::with('user','buku','denda')
+            ->where('status', 'dikembalikan')
+            ->get();
+    } 
+
+    elseif ($jenis == 'denda') {
+
+        // ✅ FIX PALING PENTING
+        $data = Denda::with('user','peminjaman.buku')
+            ->where('status','lunas') // 🔥 WAJIB
+            ->where('total_denda','>',0)
+            ->get();
+    }
+
+    return view('admin.laporan.index', compact('data','jenis'));
+}
 }

@@ -36,4 +36,13 @@ class DendaController extends Controller
 
         return view('denda.selesai');
     }
+
+    public function laporan()
+{
+    $dendas = \App\Models\Denda::with('peminjaman.buku')
+        ->where('status', 'lunas') // 🔥 HANYA YANG SUDAH BAYAR
+        ->get();
+
+    return view('denda.laporan', compact('dendas'));
+}
 }

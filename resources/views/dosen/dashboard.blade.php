@@ -6,26 +6,28 @@
     <h2 class="text-xl font-bold mb-4">Dashboard</h2>
 
     {{-- 🔢 RINGKASAN --}}
-    <div class="grid grid-cols-3 gap-4 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
-        <div class="bg-white p-4 rounded shadow text-center">
-            <p class="text-gray-500">Dipinjam</p>
-            <h3 class="text-xl font-bold">{{ $total }}</h3>
-        </div>
-
-        <div class="bg-white p-4 rounded shadow text-center">
-            <p class="text-gray-500">Telat</p>
-            <h3 class="text-xl font-bold text-red-500">{{ $telat }}</h3>
-        </div>
-
-        <div class="bg-white p-4 rounded shadow text-center">
-            <p class="text-gray-500">Denda</p>
-            <h3 class="text-xl font-bold text-yellow-600">
-                Rp{{ number_format($denda) }}
-            </h3>
-        </div>
-
+    <div class="bg-white p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500">Dipinjam</p>
+        <h3 class="text-2xl font-bold">{{ $total }}</h3>
     </div>
+
+    <div class="bg-white p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500">Telat</p>
+        <h3 class="text-2xl font-bold text-red-500">
+            {{ $telat }}
+        </h3>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500">Denda</p>
+        <h3 class="text-2xl font-bold text-yellow-600">
+            Rp{{ number_format($denda) }}
+        </h3>
+    </div>
+
+</div>
 
     {{-- 📚 PREVIEW BUKU --}}
     <h3 class="text-lg font-bold mb-3">Buku Dipinjam (Terbaru)</h3>

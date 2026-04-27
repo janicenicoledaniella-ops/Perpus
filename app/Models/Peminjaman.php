@@ -29,7 +29,7 @@ class Peminjaman extends Model
     }
 
     public function denda()
-    {
-    return $this->hasOne(Denda::class);
-    }
+{
+    return $this->hasOne(\App\Models\Denda::class);
+}
 }
