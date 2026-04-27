@@ -28,7 +28,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
     
-        return redirect('/katalog');
+        $email = auth()->user()->email;
+
+        if (str_starts_with($email, '01')) {
+            return redirect('/admin');
+        } elseif (str_starts_with($email, '03')) {
+            return redirect('/dosen');
+        } else {
+            return redirect('/mahasiswa');
+        }
 }
 
     /**

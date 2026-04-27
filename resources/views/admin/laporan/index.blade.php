@@ -3,7 +3,6 @@
 <form action="{{ route('admin.laporan.filter') }}" method="POST" style="display:inline;">
     @csrf
     <input type="hidden" name="jenis" value="semua">
-    <button type="submit">Lihat Semua Laporan</button>
 </form>
 
 <button onclick="toggleFilter()">Pilih Laporan</button>

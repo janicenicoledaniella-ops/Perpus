@@ -16,7 +16,15 @@ Route::get('/katalog', [KatalogController::class, 'index'])->name('buku.katalog'
 Route::get('/buku/detail/{id}', [BukuController::class, 'show'])->name('buku.show');
 
 Route::get('/dashboard', function () {
-    return redirect('/katalog');
+    $user = auth()->user();
+
+    if ($user->role == 'admin') {
+        return redirect('/admin');
+    } elseif ($user->role == 'dosen') {
+        return redirect('/dosen');
+    } else { 
+        return redirect('/mahasiswa');
+    }
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -38,7 +46,6 @@ Route::middleware(['auth'])->prefix('mahasiswa')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
     Route::get('/laporan', [AdminController::class, 'laporan'])->name('admin.laporan.index');
     Route::post('/laporan/filter', [AdminController::class, 'laporanFilter'])->name('admin.laporan.filter');
 
