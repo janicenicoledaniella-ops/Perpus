@@ -20,6 +20,8 @@
         <a href="{{ route('admin.dosen.index') }}" class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-700">Kelola Dosen</a>
         <a href="{{ route('admin.mahasiswa.index') }}" class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-700">Kelola Mahasiswa</a>
         <a href="{{ route('admin.buku.index') }}" class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-700">Kelola Buku</a>
+        <a href="{{ route('admin.peminjaman.index') }}"class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-700">Kelola Peminjaman</a>
+        <a href="{{ route('admin.pengembalian.index') }}"class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-700">Kelola Pengembalian</a>
         <a href="{{ route('admin.laporan.index') }}" class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-700">Lihat Laporan</a>
     </div>
 

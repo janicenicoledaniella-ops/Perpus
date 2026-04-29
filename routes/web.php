@@ -46,6 +46,9 @@ Route::middleware(['auth'])->prefix('mahasiswa')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('admin.peminjaman.index');
+
+    Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('admin.pengembalian.index');
     Route::get('/laporan', [AdminController::class, 'laporan'])->name('admin.laporan.index');
     Route::post('/laporan/filter', [AdminController::class, 'laporanFilter'])->name('admin.laporan.filter');
 
