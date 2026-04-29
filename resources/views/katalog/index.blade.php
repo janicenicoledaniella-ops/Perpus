@@ -7,6 +7,7 @@
         <input type="text" name="q" placeholder="Cari buku..." class="border px-2 py-1">
         <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Cari</button>
     </form>
+
     @if(session('success'))
         <div style="background:lightgreen;padding:10px;margin-bottom:10px;">
             <b>{{ session('success') }}</b><br>
@@ -20,36 +21,40 @@
             {{ session('error') }}
         </div>
     @endif
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        @forelse($bukus as $buku)
-            <div class="bg-white p-4 rounded shadow">
-                <a href="{{ route('buku.show', ['id'=> $buku->isbn]) }}">
-                    @if($buku->cover)
-                        <img src="{{ asset('storage/'.$buku->cover) }}" 
-                             style="width:120px;height:160px;object-fit:cover;margin-bottom:10px;">
-                    @endif
-                    <h3 class="text-xl font-semibold mb-2">{{ $buku->judul }}</h3>
-                </a>
-                <p>Penulis: {{ $buku->penulis }}</p>
-                <p>Stok: {{ $buku->stok }}</p>
 
-                @auth
-                    @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
-                        {{-- admin, tidak bisa pinjam --}}
-                    @elseif($buku->stok > 0)
-                        <form action="{{ route('peminjaman.pinjam', ['id'=> $buku->isbn]) }}" method="POST">
-                            @csrf
-                            <button class="bg-green-500 text-white px-3 py-1 rounded mt-2">Pinjam</button>
-                        </form>
-                    @else
-                        <span class="bg-red-500 text-white px-3 py-1 rounded mt-2 inline-block">Stok Habis</span>
+    <div class="flex flex-col gap-4">
+        @forelse($bukus as $buku)
+            <div class="bg-white p-4 rounded shadow flex items-start gap-4">
+                <a href="{{ route('buku.show', ['id'=> $buku->isbn]) }}" class="shrink-0">
+                    @if($buku->cover)
+                        <img src="{{ asset('storage/'.$buku->cover) }}"
+                             style="width:100px;height:140px;object-fit:cover;">
                     @endif
-                @else
-                    <a href="{{ route('login') }}" 
-                    class="bg-gray-500 text-white px-3 py-1 rounded mt-2 inline-block">
-                    Login untuk pinjam
+                </a>
+                <div>
+                    <a href="{{ route('buku.show', ['id'=> $buku->isbn]) }}">
+                        <h3 class="text-xl font-semibold mb-2">{{ $buku->judul }}</h3>
                     </a>
-                @endauth
+                    <p>Penulis: {{ $buku->penulis }}</p>
+                    <p>Stok: {{ $buku->stok }}</p>
+
+                    @auth
+                        @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
+                        @elseif($buku->stok > 0)
+                            <form action="{{ route('peminjaman.pinjam', ['id'=> $buku->isbn]) }}" method="POST">
+                                @csrf
+                                <button class="bg-green-500 text-white px-3 py-1 rounded mt-2">Pinjam</button>
+                            </form>
+                        @else
+                            <span class="bg-red-500 text-white px-3 py-1 rounded mt-2 inline-block">Stok Habis</span>
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}"
+                           class="bg-gray-500 text-white px-3 py-1 rounded mt-2 inline-block">
+                            Login untuk pinjam
+                        </a>
+                    @endauth
+                </div>
             </div>
         @empty
             <p>Tidak ada buku ditemukan.</p>
