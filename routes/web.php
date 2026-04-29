@@ -98,16 +98,14 @@ Route::middleware('auth')->group(function () {
         ->name('peminjaman.pinjam');
 
     Route::post('/peminjaman/kembali/{id}', [PengembalianController::class, 'kembali'])
-    ->name('peminjaman.kembali');
-
-    Route::post('/kembali/{id}', [PengembalianController::class, 'kembali'])
-    ->name('kembali');
+        ->name('peminjaman.kembali');
 
     Route::get('/denda', [DendaController::class, 'index'])->name('denda.index');
     Route::post('/denda/bayar', [DendaController::class, 'bayar'])->name('denda.bayar');
-    Route::get('/denda/qr', [DendaController::class, 'qr'])->name('denda.qr');
-    Route::get('/denda/selesai', [DendaController::class, 'selesai'])->name('denda.selesai');
 
+    // ✅ BOOKING (cukup sekali, jangan dobel)
+    Route::get('/booking/{id}', [PeminjamanController::class, 'formBooking'])->name('booking.form');
+    Route::post('/booking/{id}', [PeminjamanController::class, 'prosesBooking'])->name('booking.proses');
 });
 
 require __DIR__.'/auth.php';

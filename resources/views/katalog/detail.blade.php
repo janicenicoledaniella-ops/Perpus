@@ -32,12 +32,10 @@
             @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
                 {{-- admin, tidak bisa pinjam --}}
             @else
-            <form action="{{ route('peminjaman.pinjam', $buku->isbn) }}" method="POST" style="display:inline;">
-                @csrf
-                <button style="background:green;color:white;padding:8px 15px;border:none;border-radius:5px;cursor:pointer;">
-                    Pinjam Buku
-                </button>
-            </form>
+            <a href="{{ route('booking.form', ['id' => $buku->isbn]) }}"
+            style="background:green;color:white;padding:8px 15px;border:none;border-radius:5px;cursor:pointer;display:inline-block;">
+            Booking Buku
+            </a>
             @endif
         @else
             <a href="{{ route('login') }}" 

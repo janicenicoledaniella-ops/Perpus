@@ -39,21 +39,20 @@
                     <p>Stok: {{ $buku->stok }}</p>
 
                     @auth
-                        @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
-                        @elseif($buku->stok > 0)
-                            <form action="{{ route('peminjaman.pinjam', ['id'=> $buku->isbn]) }}" method="POST">
-                                @csrf
-                                <button class="bg-green-500 text-white px-3 py-1 rounded mt-2">Pinjam</button>
-                            </form>
-                        @else
-                            <span class="bg-red-500 text-white px-3 py-1 rounded mt-2 inline-block">Stok Habis</span>
-                        @endif
-                    @else
-                        <a href="{{ route('login') }}"
-                           class="bg-gray-500 text-white px-3 py-1 rounded mt-2 inline-block">
-                            Login untuk pinjam
-                        </a>
-                    @endauth
+    @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
+
+    @elseif($buku->stok > 0)
+        <a href="{{ route('booking.form', ['id' => $buku->isbn]) }}">
+    <button class="bg-green-600 text-white px-3 py-1 rounded mt-2">
+        Booking Buku
+    </button>
+</a>
+    @else
+        <span class="bg-red-500 text-white px-3 py-1 rounded mt-2 inline-block">
+            Stok Habis
+        </span>
+    @endif
+@endauth
                 </div>
             </div>
         @empty
