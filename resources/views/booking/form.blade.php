@@ -17,9 +17,18 @@
         <div>
             <h2 class="text-2xl font-bold mb-2">{{ $buku->judul }}</h2>
 
-            <p>Penulis: {{ $buku->penulis }}</p>
-            <p>Stok: {{ $buku->stok }}</p>
-            <p>Letak Buku: Rak C 289</p>
+            <p><b>Penulis:</b> {{ $buku->penulis }}</p>
+            <p><b>Penerbit:</b> {{ $buku->penerbit }}</p>
+            <p><b>Tahun:</b> {{ $buku->tahun }}</p>
+            <p><b>Kategori:</b> {{ $buku->kategori }}</p>
+            <p><b>ISBN:</b> {{ $buku->isbn }}</p>
+            <p><b>Stok:</b> {{ $buku->stok }}</p>
+
+            <div class="mt-3">
+            <b>Deskripsi:</b>
+            <p class="text-gray-700">
+            {{ $buku->deskripsi }}
+        </p>
 
             <br>
 

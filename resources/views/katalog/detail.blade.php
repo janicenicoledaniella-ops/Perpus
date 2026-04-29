@@ -1,15 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-6">
+<div class="bg-white p-20 rounded shadow flex gap-6">
 
-    <div class="bg-white p-6 rounded shadow">
-
+    {{-- COVER --}}
+    <div>
         @if($buku->cover)
-            <img src="{{ asset('storage/' .$buku->cover) }}" 
-                 style="width:200px;margin-bottom:20px;">
+            <img src="{{ asset('storage/'.$buku->cover) }}" 
+                 style="width:200px;object-fit:cover;">
         @endif
+    </div>
 
+    {{-- DETAIL --}}
+    <div>
         <h1 style="font-size:24px;font-weight:bold;">
             {{ $buku->judul }}
         </h1>
@@ -30,17 +33,16 @@
 
         @auth
             @if(!str_ends_with(Auth::user()->email, '@student.edu') && !str_ends_with(Auth::user()->email, '@lecture.edu'))
-                {{-- admin, tidak bisa pinjam --}}
             @else
-            <a href="{{ route('booking.form', ['id' => $buku->isbn]) }}"
-            style="background:green;color:white;padding:8px 15px;border:none;border-radius:5px;cursor:pointer;display:inline-block;">
-            Booking Buku
-            </a>
+                <a href="{{ route('booking.form', ['id' => $buku->isbn]) }}"
+                   style="background:green;color:white;padding:8px 15px;border-radius:5px;display:inline-block;">
+                   Booking Buku
+                </a>
             @endif
         @else
             <a href="{{ route('login') }}" 
-            style="background:gray;color:white;padding:8px 15px;">
-            Login untuk Pinjam
+               style="background:gray;color:white;padding:8px 15px;">
+               Login untuk Booking
             </a>
         @endauth
 
