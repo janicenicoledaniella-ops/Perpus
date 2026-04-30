@@ -9,12 +9,27 @@
     </form>
 
     @if(session('success'))
-        <div style="background:lightgreen;padding:10px;margin-bottom:10px;">
-            <b>{{ session('success') }}</b><br>
-            Tenggat: {{ session('jatuh_tempo') }} <br>
-            Denda: Rp{{ number_format(session('denda')) }} / hari
-        </div>
-    @endif
+    <div style="background:lightgreen;padding:10px;margin-bottom:10px;">
+        <b>{{ session('success') }}</b><br>
+
+        @if(session('tanggal_ambil'))
+            Tanggal pengambilan buku: {{ session('tanggal_ambil') }}
+        @endif
+    </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function() {
+        let notif = document.getElementById('notif-success');
+        if (notif) {
+            notif.style.opacity = "0";
+            notif.style.transition = "opacity 0.5s";
+
+            setTimeout(() => notif.remove(), 500);
+        }
+    }, 5000);
+});
+</script>
+@endif
 
     @if(session('error'))
         <div style="background:pink;padding:10px;margin-bottom:10px;">

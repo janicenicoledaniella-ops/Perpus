@@ -108,28 +108,82 @@ class PeminjamanController extends Controller
     }
 
     public function prosesBooking(Request $request, $id)
-    {
-        $request->validate([
-            'tanggal' => 'required|date'
-        ]);
+{
+    $request->validate([
+        'tanggal' => 'required|date'
+    ]);
 
-        $buku = Buku::where('isbn', $id)->firstOrFail();
+    $buku = Buku::where('isbn', $id)->firstOrFail();
 
-        if ($buku->stok <= 0) {
-            return back()->with('error', 'Stok habis');
-        }
-
-        Peminjaman::create([
-            'user_id' => Auth::id(),
-            'buku_id' => $buku->isbn,
-            'tanggal_pinjam' => $request->tanggal,
-            'tanggal_jatuh_tempo' => Carbon::parse($request->tanggal)->addDays(7),
-            'status' => 'dipinjam'
-        ]);
-
-        $buku->decrement('stok');
-
-        return redirect()->route('katalog.index')
-            ->with('success', 'Booking berhasil!');
+    if ($buku->stok <= 0) {
+        return back()->with('error', 'Stok habis');
     }
+
+    Peminjaman::create([
+        'user_id' => Auth::id(),
+        'buku_id' => $buku->isbn,
+        'tanggal_pinjam' => null, // ⛔ INI PENTING
+        'tanggal_jatuh_tempo' => null,
+        'status' => 'booking', // ⛔ INI PENTING
+        'tanggal_booking' => $request->tanggal // ⛔ TAMBAH INI
+    ]);
+
+    return redirect()->route('katalog.index')
+        ->with('success', 'Booking berhasil! tanggal pengambilan buku: '.$request->tanggal);
+}
+
+    public function adminIndex()
+{
+    $booking = Peminjaman::with('buku','user')
+        ->where('status', 'booking')
+        ->get();
+
+    $peminjaman = Peminjaman::with('buku','user')
+        ->where('status', 'dipinjam')
+        ->get();
+
+    $bukus = Buku::all();
+
+    return view('admin.peminjaman.index', compact('booking', 'peminjaman', 'bukus'));
+}
+
+public function ambilBuku($id)
+{
+    $data = Peminjaman::findOrFail($id);
+
+    $data->status = 'dipinjam';
+    $data->tanggal_pinjam = now();
+    $data->tanggal_jatuh_tempo = now()->addDays(7);
+    $data->save();
+
+    return response()->json(['success' => true]);
+}
+
+    public function pinjamManual(Request $request)
+{
+    $user = \App\Models\User::find($request->user_id);
+    $buku = \App\Models\Buku::where('isbn', $request->buku_id)->first();
+
+    if (!$user || !$buku) {
+        return back()->with('error', 'Data tidak ditemukan');
+    }
+
+    $data = \App\Models\Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $buku->isbn,
+        'tanggal_pinjam' => now(),
+        'tanggal_jatuh_tempo' => now()->addDays(7),
+        'status' => 'dipinjam'
+    ]);
+
+    // 👉 PINDAH KE HALAMAN BARU
+    return redirect()->route('admin.peminjaman.hasil', $data->id);
+}
+
+public function hasil($id)
+{
+    $data = Peminjaman::with('user','buku')->findOrFail($id);
+
+    return view('admin.peminjaman.hasil', compact('data'));
+}
 }

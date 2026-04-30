@@ -46,7 +46,11 @@ Route::middleware(['auth'])->prefix('mahasiswa')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('admin.peminjaman.index');
+    Route::get('/peminjaman', [PeminjamanController::class, 'adminIndex'])->name('admin.peminjaman.index');
+    Route::post('/ambil/{id}', [PeminjamanController::class, 'ambilBuku'])
+    ->name('admin.ambil');
+    Route::get('/admin/peminjaman/hasil/{id}', [PeminjamanController::class, 'hasil'])
+    ->name('admin.peminjaman.hasil');
 
     Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('admin.pengembalian.index');
     Route::get('/laporan', [AdminController::class, 'laporan'])->name('admin.laporan.index');
@@ -91,8 +95,12 @@ Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
 
 Route::middleware('auth')->group(function () {
 
+
+    Route::post('/admin/pinjam-manual', [PeminjamanController::class, 'pinjamManual'])
+    ->name('peminjaman.pinjamManual');
+
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])
-        ->name('peminjaman.index');
+    ->name('peminjaman.index');
 
     Route::post('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])
         ->name('peminjaman.pinjam');
@@ -107,5 +115,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking/{id}', [PeminjamanController::class, 'formBooking'])->name('booking.form');
     Route::post('/booking/{id}', [PeminjamanController::class, 'prosesBooking'])->name('booking.proses');
 });
+
 
 require __DIR__.'/auth.php';
