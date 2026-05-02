@@ -3,46 +3,58 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Denda;
+use App\Models\Denda; 
 use Illuminate\Support\Facades\Auth;
 
 class DendaController extends Controller
 {
     public function index()
-{
-    $peminjaman = \App\Models\Peminjaman::with('buku')
-        ->where('user_id', auth()->id())
-        ->where('status', 'dipinjam')
-        ->get();
+    {
+        $dendas = Denda::with('peminjaman.buku')
+            ->where('user_id', Auth::id())
+            ->get();
 
-    return view('denda.index', compact('peminjaman'));
+        return view('denda.index', compact('dendas'));
+    }
+
+    public function detail(int $id)
+{
+    $denda = Denda::with('peminjaman.buku')
+        ->where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    return view('denda.detail', compact('denda'));
 }
 
-    public function bayar()
-    {
-        return redirect()->route('denda.qr');
-    }
-
-    public function qr()
-    {
-        return view('denda.qr');
-    }
-
-    public function selesai()
-    {
-        Denda::where('user_id', Auth::id())
-            ->where('status', 'belum_bayar')
-            ->update(['status' => 'lunas']);
-
-        return view('denda.selesai');
-    }
-
-    public function laporan()
+public function qr(int $id)
 {
-    $dendas = \App\Models\Denda::with('peminjaman.buku')
-        ->where('status', 'lunas') // 🔥 HANYA YANG SUDAH BAYAR
-        ->get();
+    $denda = Denda::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
 
-    return view('denda.laporan', compact('dendas'));
+    return view('denda.qr', compact('denda'));
+}
+
+public function bayar(int $id)
+{
+    $denda = Denda::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    $denda->update([
+        'status' => 'lunas'
+    ]);
+
+    return redirect()->route('denda.selesai', $denda->id);
+}
+
+public function selesai(int $id)
+{
+    $denda = Denda::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    return view('denda.selesai', compact('denda'));
 }
 }
