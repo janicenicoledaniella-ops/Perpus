@@ -39,8 +39,8 @@
                     <td>{{ $b->tanggal_booking }}</td>
                     <td>
                         <button onclick="ambil({{ $b->id }})"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
-                            Ambil
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+                        Ambil Buku
                         </button>
                     </td>
                 </tr>
