@@ -46,17 +46,23 @@
             <p>⏳ Jatuh Tempo: {{ $item->tanggal_jatuh_tempo }}</p>
 
             {{-- 🔥 HITUNG DENDA MENIT --}}
-            @php
-                $now = now();
-                $jatuh = \Carbon\Carbon::parse($item->tanggal_jatuh_tempo);
+           @php
+    $jatuhTempo = \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay();
+    $sekarang   = now()->startOfDay();
 
-                $denda = 0;
+    $denda = 0;
+    $terlambat = 0;
 
-                if ($now->gt($jatuh)) {
-                    $terlambat = ceil($jatuh->diffInSeconds($now) / 60);
-                    $denda = $terlambat * 1000;
-                }
-            @endphp
+    if ($sekarang->gt($jatuhTempo)) {
+        $terlambat = $jatuhTempo->diffInDays($sekarang);
+
+        if ($terlambat == 0) {
+            $terlambat = 1;
+        }
+
+        $denda = $terlambat * 1000;
+    }
+@endphp
 
             {{-- Status --}}
             @if($denda > 0)
@@ -70,12 +76,9 @@
             @endif
 
             {{-- Tombol --}}
-            <form action="{{ route('peminjaman.kembali', $item->id) }}" method="POST">
-                @csrf
-                <button style="background:red;color:white;padding:6px 12px;margin-top:8px;border:none;border-radius:4px;">
-                    Kembalikan
-                </button>
-            </form>
+            <td>
+    <span style="color:gray;">Menunggu Admin</span>
+</td>
 
         </div>
 

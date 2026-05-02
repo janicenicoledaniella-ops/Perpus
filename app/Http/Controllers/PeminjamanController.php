@@ -17,18 +17,6 @@ class PeminjamanController extends Controller
             ->where('status', 'dipinjam')
             ->get();
 
-        foreach ($peminjaman as $item) {
-            $jatuhTempo = Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay();
-            $sekarang   = now()->startOfDay();
-
-            if ($sekarang->gt($jatuhTempo)) {
-                $hari = $jatuhTempo->diffInDays($sekarang);
-                $item->denda = $hari * 1000;
-            } else {
-                $item->denda = 0;
-            }
-        }
-
         return view('peminjaman.index', compact('peminjaman'));
     }
 
@@ -66,7 +54,7 @@ class PeminjamanController extends Controller
         return $this->dashboardMahasiswa();
     }
 
-    public function pinjam($id)
+    public function pinjam(int $id)
     {
         $user = Auth::user();
 
@@ -101,13 +89,13 @@ class PeminjamanController extends Controller
 
     // ================== BOOKING ==================
 
-    public function formBooking($id)
+    public function formBooking(int $id)
     {
         $buku = Buku::where('isbn', $id)->firstOrFail();
         return view('booking.form', compact('buku'));
     }
 
-    public function prosesBooking(Request $request, $id)
+    public function prosesBooking(Request $request,int $id)
 {
     $request->validate([
         'tanggal' => 'required|date'
@@ -147,7 +135,7 @@ class PeminjamanController extends Controller
     return view('admin.peminjaman.index', compact('booking', 'peminjaman', 'bukus'));
 }
 
-public function ambilBuku($id)
+public function ambilBuku(int $id)
 {
     $data = Peminjaman::findOrFail($id);
 
@@ -180,7 +168,7 @@ public function ambilBuku($id)
     return redirect()->route('admin.peminjaman.hasil', $data->id);
 }
 
-public function hasil($id)
+public function hasil(int $id)
 {
     $data = Peminjaman::with('user','buku')->findOrFail($id);
 

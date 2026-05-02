@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User; 
+use Carbon\Carbon;
 
 class Peminjaman extends Model
 {
@@ -28,8 +29,22 @@ class Peminjaman extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function denda()
+    public function DataDenda()
 {
     return $this->hasOne(\App\Models\Denda::class);
+}
+public function getDendaAttribute()
+{
+    if (!$this->tanggal_jatuh_tempo) return 0;
+
+    $jatuhTempo = Carbon::parse($this->tanggal_jatuh_tempo)->startOfDay();
+    $sekarang   = now()->startOfDay();
+
+    if ($sekarang->gt($jatuhTempo)) {
+        $hari = $jatuhTempo->diffInDays($sekarang);
+        return $hari * 1000;
+    }
+
+    return 0;
 }
 }

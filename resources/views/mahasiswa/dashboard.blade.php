@@ -1,67 +1,80 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-5xl mx-auto py-6">
+<div class="max-w-6xl mx-auto py-6">
 
-    <h2 class="text-xl font-bold mb-4">Dashboard</h2>
+    <h2 class="text-2xl font-bold mb-6">Dashboard Saya</h2>
 
     {{-- 🔢 RINGKASAN --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-    <div class="bg-white p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500">Dipinjam</p>
-        <h3 class="text-2xl font-bold">{{ $total }}</h3>
+        <div class="bg-white p-6 rounded-2xl shadow text-center border-l-4 border-blue-500">
+            <p class="text-gray-500">Buku Dipinjam</p>
+            <h3 class="text-3xl font-bold text-blue-600">{{ $total }}</h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow text-center border-l-4 border-red-500">
+            <p class="text-gray-500">Terlambat</p>
+            <h3 class="text-3xl font-bold text-red-500">{{ $telat }}</h3>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow text-center border-l-4 border-yellow-500">
+            <p class="text-gray-500">Total Denda</p>
+            <h3 class="text-3xl font-bold text-yellow-600">
+                Rp{{ number_format($denda) }}
+            </h3>
+        </div>
+
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500">Telat</p>
-        <h3 class="text-2xl font-bold text-red-500">
-            {{ $telat }}
-        </h3>
+    {{-- ⚠️ ALERT DENDA --}}
+    @if($denda > 0)
+    <div class="bg-red-100 border border-red-300 text-red-700 p-4 rounded mb-6">
+        ⚠️ Kamu memiliki denda yang belum dibayar!
     </div>
+    @endif
 
-    <div class="bg-white p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500">Denda</p>
-        <h3 class="text-2xl font-bold text-yellow-600">
-            Rp{{ number_format($denda) }}
-        </h3>
-    </div>
-
-</div>
-
-    {{-- 📚 PREVIEW BUKU --}}
-    <h3 class="text-lg font-bold mb-3">Buku Dipinjam (Terbaru)</h3>
+    {{-- 📚 BUKU DIPINJAM --}}
+    <h3 class="text-xl font-bold mb-4">Buku Dipinjam</h3>
 
     @if($data->isEmpty())
-        <p>Tidak ada buku dipinjam</p>
+        <p class="text-gray-500">Tidak ada buku dipinjam</p>
     @endif
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         @foreach($data as $item)
-            <div class="bg-white p-4 rounded shadow">
+            <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
 
+                {{-- Cover --}}
                 @if($item->buku && $item->buku->cover)
                     <img src="{{ asset('storage/'.$item->buku->cover) }}"
-                         style="width:120px;height:160px;object-fit:cover;margin-bottom:10px;">
+                         class="w-full h-48 object-cover rounded mb-3">
                 @endif
 
-                <h3 class="font-bold">
+                {{-- Judul --}}
+                <h3 class="font-bold text-lg">
                     {{ $item->buku->judul ?? '-' }}
                 </h3>
 
-                <p class="text-sm">
-                    Jatuh tempo: {{ $item->tanggal_jatuh_tempo }}
+                {{-- Tanggal --}}
+                <p class="text-sm text-gray-500">
+                    Jatuh tempo: {{ \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->format('d M Y') }}
                 </p>
 
+                {{-- Status --}}
                 @php
                     $telat = now()->gt($item->tanggal_jatuh_tempo);
                 @endphp
 
                 @if($telat)
-                    <p style="color:red;">Telat</p>
+                    <span class="inline-block mt-2 px-3 py-1 text-sm bg-red-500 text-white rounded-full">
+                        Terlambat
+                    </span>
                 @else
-                    <p style="color:green;">Aman</p>
+                    <span class="inline-block mt-2 px-3 py-1 text-sm bg-green-500 text-white rounded-full">
+                        Dipinjam
+                    </span>
                 @endif
 
             </div>
@@ -69,33 +82,20 @@
 
     </div>
 
+    {{-- 🔗 ACTION --}}
+    <div class="mt-8 flex gap-4">
 
-
-    {{-- 🔗 LINK --}}
-    <div class="mt-6">
         <a href="{{ route('peminjaman.index') }}"
-           class="bg-blue-500 text-white px-4 py-2 rounded">
+           class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg">
            Lihat Semua Peminjaman
         </a>
+
+        <a href="{{ route('denda.index') }}"
+           class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg">
+           Detail Denda
+        </a>
+
     </div>
-
-    <div class="mt-4">
-    <a href="{{ route('denda.index') }}">
-        <button style="background:red;color:white;padding:10px 20px;">
-            Lihat Denda
-        </button>
-    </a>
-</div>
-
-    @if($denda > 0)
-<div class="mt-4 text-center">
-    <a href="{{ route('denda.index') }}">
-        <button style="background:red;color:white;padding:10px 20px;">
-            Bayar Denda
-        </button>
-    </a>
-</div>
-@endif
 
 </div>
 @endsection
