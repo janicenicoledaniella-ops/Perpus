@@ -90,6 +90,11 @@
            Lihat Semua Peminjaman
         </a>
 
+        <a href="{{ route('booking.index') }}"
+            class="bg-purple-500 hover:bg-purple-600 text-white px-5 py-2 rounded-lg">
+            Lihat Booking Buku
+        </a>
+
         <a href="{{ route('denda.index') }}"
            class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg">
            Detail Denda

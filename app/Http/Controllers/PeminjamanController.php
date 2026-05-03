@@ -123,8 +123,15 @@ class PeminjamanController extends Controller
     public function adminIndex()
 {
     $booking = Peminjaman::with('buku','user')
-        ->where('status', 'booking')
-        ->get();
+    ->where(function($q){
+        $q->where('status', 'booking')
+          ->orWhere(function($q2){
+              $q2->where('status', 'dipinjam')
+                 ->whereNotNull('diambil_at')
+                 ->where('diambil_at', '>=', now()->subDay()); // ⛔ 24 jam
+          });
+    })
+    ->get();
 
     $peminjaman = Peminjaman::with('buku','user')
         ->where('status', 'dipinjam')
@@ -135,18 +142,19 @@ class PeminjamanController extends Controller
     return view('admin.peminjaman.index', compact('booking', 'peminjaman', 'bukus'));
 }
 
-public function ambilBuku(int $id)
+public function ambilBuku($id)
 {
-    $data = Peminjaman::findOrFail($id);
+    $booking = Peminjaman::findOrFail($id);
 
-    $data->status = 'dipinjam';
-    $data->tanggal_pinjam = now();
-    $data->tanggal_jatuh_tempo = now()->addDays(7);
-    $data->save();
+    $booking->update([
+        'status' => 'dipinjam',
+        'tanggal_pinjam' => now(),
+        'tanggal_jatuh_tempo' => now()->addDays(7),
+        'diambil_at' => now() // kalau kamu pakai fitur 24 jam
+    ]);
 
-    return response()->json(['success' => true]);
+    return redirect()->back()->with('success', 'Buku berhasil diambil');
 }
-
     public function pinjamManual(Request $request)
 {
     $user = \App\Models\User::find($request->user_id);

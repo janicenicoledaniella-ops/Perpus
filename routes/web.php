@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,6 +177,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/denda/{id}/selesai', [DendaController::class, 'selesai'])
         ->name('denda.selesai');
+    
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
 });
 
 require __DIR__.'/auth.php';
