@@ -16,13 +16,14 @@ class Peminjaman extends Model
         'tanggal_pinjam',
         'tanggal_jatuh_tempo',
         'tanggal_kembali',
-        'status'
+        'status',
+        'tanggal_booking'
     ];
 
     public function buku()
-    {
-        return $this->belongsTo(Buku::class, 'buku_id', 'isbn');
-    }
+{
+    return $this->belongsTo(Buku::class, 'buku_id', 'isbn');
+}
 
     public function user()
     {

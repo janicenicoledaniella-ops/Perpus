@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Peminjaman; 
 
 class BookingController extends Controller
 {
-    // 🔹 Tampilkan booking user
-    public function index()
-    {
-        $booking = Booking::with(['buku','user'])->get();
 
-        return view('booking.index', compact('booking'));
-    }
+public function index()
+{
+    $booking = Peminjaman::with('buku')
+        ->where('user_id', auth()->id())
+        ->where('status', 'booking') // ⛔ INI KUNCI
+        ->latest()
+        ->get();
+
+    return view('booking.index', compact('booking'));
+}
 
     public function store($buku_id)
 {

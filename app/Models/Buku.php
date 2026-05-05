@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Buku extends Model
 {
-     use HasFactory;
+    protected $table = 'bukus';
+
+    protected $primaryKey = 'isbn'; // ✅ WAJIB
+    public $incrementing = false;   // ✅ WAJIB
+    protected $keyType = 'string';  // ✅ WAJIB
 
     protected $fillable = [
         'judul',
@@ -20,11 +24,4 @@ class Buku extends Model
         'deskripsi',
         'cover'
     ];
-     public function peminjaman()
-    {
-        return $this->hasMany(Peminjaman::class, 'buku_id', 'isbn');
-    }
-    protected $primaryKey = 'isbn';
-public $incrementing = false;
-protected $keyType = 'string';
 }

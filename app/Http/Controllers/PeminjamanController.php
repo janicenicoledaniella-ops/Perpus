@@ -146,11 +146,12 @@ public function ambilBuku($id)
 {
     $booking = Peminjaman::findOrFail($id);
 
+    // update jadi dipinjam
     $booking->update([
         'status' => 'dipinjam',
         'tanggal_pinjam' => now(),
         'tanggal_jatuh_tempo' => now()->addDays(7),
-        'diambil_at' => now() // kalau kamu pakai fitur 24 jam
+        'diambil_at' => now() // ⛔ PENANDA DIAMBIL
     ]);
 
     return redirect()->back()->with('success', 'Buku berhasil diambil');
