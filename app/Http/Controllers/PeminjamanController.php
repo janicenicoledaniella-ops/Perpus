@@ -95,7 +95,7 @@ class PeminjamanController extends Controller
         return view('booking.form', compact('buku'));
     }
 
-    public function prosesBooking(Request $request,int $id)
+    public function prosesBooking(Request $request, int $id)
 {
     $request->validate([
         'tanggal' => 'required|date'
@@ -110,10 +110,10 @@ class PeminjamanController extends Controller
     Peminjaman::create([
         'user_id' => Auth::id(),
         'buku_id' => $buku->isbn,
-        'tanggal_pinjam' => null, 
+        'tanggal_pinjam' => null,
         'tanggal_jatuh_tempo' => null,
-        'status' => 'booking', 
-        'tanggal_booking' => $request->tanggal 
+        'status' => 'booking',
+        'tanggal_booking' => $request->tanggal
     ]);
 
     return redirect()->route('katalog.index')
@@ -174,7 +174,9 @@ public function ambilBuku(int $id)
     ]);
 
     // 👉 PINDAH KE HALAMAN BARU
-    return redirect()->route('admin.peminjaman.hasil', $data->id);
+    return redirect()->back()
+    ->with('success', 'Buku berhasil dipinjam')
+    ->with('active_tab', 'peminjaman'); // ⛔ INI KUNCI
 }
 
 public function hasil(int $id)

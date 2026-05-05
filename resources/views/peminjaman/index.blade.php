@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-5xl mx-auto py-6">
 
     <h2 class="text-xl font-bold mb-4">Buku yang Sedang Dipinjam</h2>
 

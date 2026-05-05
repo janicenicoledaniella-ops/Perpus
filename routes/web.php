@@ -93,6 +93,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/ambil/{id}', [PeminjamanController::class, 'ambilBuku'])
         ->name('admin.ambil');
 
+    // 🔥 PINJAM MANUAL (WAJIB)
+    Route::post('/peminjaman/manual', [PeminjamanController::class, 'pinjamManual'])
+        ->name('admin.peminjaman.manual');
+
     Route::get('/peminjaman/hasil/{id}', [PeminjamanController::class, 'hasil'])
         ->name('admin.peminjaman.hasil');
 
