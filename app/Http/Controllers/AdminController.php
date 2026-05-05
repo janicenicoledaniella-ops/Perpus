@@ -62,13 +62,13 @@ class AdminController extends Controller
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil ditambahkan');
     }
 
-    public function dosenEdit($id)
+    public function dosenEdit(int $id)
     {
         $dosen = User::findOrFail($id);
         return view('admin.dosen.edit', compact('dosen'));
     }
 
-    public function dosenUpdate(Request $request, $id)
+    public function dosenUpdate(Request $request,int $id)
     {
         $request->validate([
             'name'  => 'required|string|max:255',
@@ -90,7 +90,7 @@ class AdminController extends Controller
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil diupdate');
     }
 
-    public function dosenDestroy($id)
+    public function dosenDestroy(int $id)
     {
        User::destroy($id);
        return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil dihapus');
@@ -133,13 +133,13 @@ class AdminController extends Controller
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil ditambahkan');
     }
 
-    public function mahasiswaEdit($id)
+    public function mahasiswaEdit(int $id)
     {
         $mahasiswa = User::findOrFail($id);
         return view('admin.mahasiswa.edit', compact('mahasiswa'));
     }
 
-    public function mahasiswaUpdate(Request $request, $id)
+    public function mahasiswaUpdate(Request $request, int $id)
     {
         $request->validate([
             'name'  => 'required|string|max:255',
@@ -162,7 +162,7 @@ class AdminController extends Controller
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil diupdate');
     }
 
-    public function mahasiswaDestroy($id)
+    public function mahasiswaDestroy(int $id)
     {
         User::destroy($id);
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil dihapus');
@@ -218,13 +218,13 @@ class AdminController extends Controller
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan');
     }
 
-    public function bukuEdit($id)
+    public function bukuEdit(int $id)
 {
     $data = Buku::findOrFail($id);
     return view('admin.buku.edit', compact('data'));
 }
 
-    public function bukuUpdate(Request $request, $id)
+    public function bukuUpdate(Request $request, int $id)
     {
         $request->validate([
             'judul'    => 'required|string|max:255',
@@ -253,7 +253,7 @@ class AdminController extends Controller
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diupdate');
     }
 
-    public function bukuDestroy($id)
+    public function bukuDestroy(int $id)
     {
         $buku = Buku::findOrFail($id);
 
@@ -309,7 +309,6 @@ class AdminController extends Controller
 
     elseif ($jenis == 'pengembalian') {
 
-        // ✅ SEMUA PENGEMBALIAN MASUK
         $data = Peminjaman::with('user','buku','denda')
             ->where('status', 'dikembalikan')
             ->get();
@@ -317,7 +316,6 @@ class AdminController extends Controller
 
     elseif ($jenis == 'denda') {
 
-        // ✅ FIX PALING PENTING
         $data = Denda::with('user','peminjaman.buku')
             ->where('status','lunas') // 🔥 WAJIB
             ->where('total_denda','>',0)

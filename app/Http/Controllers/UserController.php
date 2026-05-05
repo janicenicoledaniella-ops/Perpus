@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Denda;
 use App\Models\Peminjaman;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -31,13 +33,13 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function edit($id)
+    public function edit( int $id)
     {
         $user = User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $user = User::findOrFail($id);
 
@@ -50,7 +52,7 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         User::destroy($id);
 
