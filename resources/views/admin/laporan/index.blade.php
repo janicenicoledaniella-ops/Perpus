@@ -110,7 +110,7 @@ function toggleFilter() {
     <td>{{ explode('@', $p->user->email)[0] }}</td>
     <td>{{ $p->buku->judul ?? '-' }}</td>
     <td>{{ $p->buku->isbn ?? '-' }}</td>
-    <td>{{ $p->tanggal_kembali }}</td>
+    <td>{{ \Carbon\Carbon::parse($p->tanggal_kembali)->format('d-m-Y') }}</td>
     <td>
     @if($p->denda)
         @if($p->denda->status == 'lunas')
@@ -227,12 +227,12 @@ function toggleFilter() {
     <td>{{ explode('@', $p->user->email)[0] }}</td>
     <td>{{ $p->buku->judul ?? '-' }}</td>
     <td>{{ $p->buku->isbn ?? '-' }}</td>
-    <td>{{ $p->tanggal_kembali }}</td>
+    <td>{{ \Carbon\Carbon::parse($p->tanggal_kembali)->format('d-m-Y') }}</td>
 
-    <!-- TAMBAH INI -->
+   
     <td>
         @if($p->denda)
-            @if($p->denda->status == 'lunas')
+            @if(optional($p->denda)->status == 'lunas')
                 Lunas
             @else
                 Belum Lunas

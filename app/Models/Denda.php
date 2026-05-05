@@ -14,13 +14,13 @@ class Denda extends Model
         'status'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function peminjaman()
-    {
-        return $this->belongsTo(Peminjaman::class);
-    }
+{
+    return $this->belongsTo(\App\Models\Peminjaman::class);
+}
+
+public function user()
+{
+    return $this->belongsTo(\App\Models\User::class);
+}
 }

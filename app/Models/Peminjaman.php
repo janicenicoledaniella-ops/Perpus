@@ -29,21 +29,22 @@ class Peminjaman extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function DataDenda()
-{
-    return $this->hasOne(\App\Models\Denda::class);
-}
-public function getDendaAttribute()
-{
-    if (!$this->tanggal_jatuh_tempo) return 0;
-
-    $jatuhTempo = Carbon::parse($this->tanggal_jatuh_tempo)->startOfDay();
-    $sekarang   = now()->startOfDay();
-
-    if ($sekarang->gt($jatuhTempo)) {
-        $hari = $jatuhTempo->diffInDays($sekarang);
-        return $hari * 1000;
+    public function denda()
+    {
+        return $this->hasOne(\App\Models\Denda::class);
     }
+    
+public function getDendaAttribute()
+    {
+        if (!$this->tanggal_jatuh_tempo) return 0;
+
+        $jatuhTempo = Carbon::parse($this->tanggal_jatuh_tempo)->startOfDay();
+        $sekarang   = now()->startOfDay();
+
+        if ($sekarang->gt($jatuhTempo)) {
+            $hari = $jatuhTempo->diffInDays($sekarang);
+            return $hari * 1000;
+        }
 
     return 0;
 }

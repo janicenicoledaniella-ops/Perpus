@@ -110,10 +110,10 @@ class PeminjamanController extends Controller
     Peminjaman::create([
         'user_id' => Auth::id(),
         'buku_id' => $buku->isbn,
-        'tanggal_pinjam' => null, // ⛔ INI PENTING
+        'tanggal_pinjam' => null, 
         'tanggal_jatuh_tempo' => null,
-        'status' => 'booking', // ⛔ INI PENTING
-        'tanggal_booking' => $request->tanggal // ⛔ TAMBAH INI
+        'status' => 'booking', 
+        'tanggal_booking' => $request->tanggal 
     ]);
 
     return redirect()->route('katalog.index')
@@ -128,7 +128,7 @@ class PeminjamanController extends Controller
           ->orWhere(function($q2){
               $q2->where('status', 'dipinjam')
                  ->whereNotNull('diambil_at')
-                 ->where('diambil_at', '>=', now()->subDay()); // ⛔ 24 jam
+                 ->where('diambil_at', '>=', now()->subDay()); 
           });
     })
     ->get();
@@ -142,7 +142,7 @@ class PeminjamanController extends Controller
     return view('admin.peminjaman.index', compact('booking', 'peminjaman', 'bukus'));
 }
 
-public function ambilBuku($id)
+public function ambilBuku(int $id)
 {
     $booking = Peminjaman::findOrFail($id);
 
@@ -150,7 +150,7 @@ public function ambilBuku($id)
         'status' => 'dipinjam',
         'tanggal_pinjam' => now(),
         'tanggal_jatuh_tempo' => now()->addDays(7),
-        'diambil_at' => now() // kalau kamu pakai fitur 24 jam
+        'diambil_at' => now() 
     ]);
 
     return redirect()->back()->with('success', 'Buku berhasil diambil');
