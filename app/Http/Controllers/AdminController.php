@@ -224,7 +224,7 @@ class AdminController extends Controller
     return view('admin.buku.edit', compact('data'));
 }
 
-    public function bukuUpdate(Request $request, int $id)
+    public function bukuUpdate(Request $request, string $id)
     {
         $request->validate([
             'judul'    => 'required|string|max:255',
@@ -253,7 +253,7 @@ class AdminController extends Controller
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diupdate');
     }
 
-    public function bukuDestroy(int $id)
+    public function bukuDestroy(string $id)
     {
         $buku = Buku::findOrFail($id);
 
@@ -278,7 +278,6 @@ class AdminController extends Controller
     $dari = $request->dari;
     $sampai = $request->sampai;
 
-    // 🔥 default semua data
     if ($jenis == 'buku') {
         $data = \App\Models\Buku::all();
         return view('admin.laporan.index', compact('data', 'jenis'));
@@ -287,7 +286,6 @@ class AdminController extends Controller
     if ($jenis == 'peminjaman') {
         $query = \App\Models\Peminjaman::with('user','buku');
 
-        // ✅ FILTER TANGGAL
         if ($dari && $sampai) {
             $query->whereBetween('tanggal_pinjam', [$dari, $sampai]);
         }
@@ -321,7 +319,6 @@ class AdminController extends Controller
         return view('admin.laporan.index', compact('data', 'jenis'));
     }
 
-    // 🔥 kalau pilih semua
     $bukus = \App\Models\Buku::all();
 
     $peminjaman = \App\Models\Peminjaman::with('user','buku')

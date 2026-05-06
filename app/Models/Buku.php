@@ -9,9 +9,9 @@ class Buku extends Model
 {
     protected $table = 'bukus';
 
-    protected $primaryKey = 'isbn'; // ✅ WAJIB
-    public $incrementing = false;   // ✅ WAJIB
-    protected $keyType = 'string';  // ✅ WAJIB
+    protected $primaryKey = 'isbn'; 
+    public $incrementing = false;   
+    protected $keyType = 'string';  
 
     protected $fillable = [
         'judul',
@@ -24,4 +24,8 @@ class Buku extends Model
         'deskripsi',
         'cover'
     ];
+    public function peminjaman()
+    {
+        return $this->hasMany(\App\Models\Peminjaman::class, 'buku_id', 'isbn');
+    }
 }

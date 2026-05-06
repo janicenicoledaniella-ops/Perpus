@@ -135,7 +135,7 @@
         <td class="px-4 py-3 border border-gray-200 text-gray-500">{{ $p->buku->isbn ?? '-' }}</td>
         <td class="px-4 py-3 border border-gray-200">{{ $p->tanggal_kembali }}</td>
         <td class="px-4 py-3 border border-gray-200">
-        @if($p->denda)
+        @if($p->denda && is_object($p->denda))
             @if($p->denda->status == 'lunas')
                 <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-700">Lunas</span>
             @else
@@ -180,17 +180,6 @@
     </tbody>
     </table>
     </div>
-
-    @foreach($denda as $d)
-    <tr class="hover:bg-gray-50 transition-colors">
-        <td class="px-4 py-3">{{ $d->user->name }}</td>
-        <td class="px-4 py-3 text-gray-500">{{ explode('@', $d->user->email)[0] }}</td>
-        <td class="px-4 py-3">{{ $d->peminjaman->buku->judul ?? '-' }}</td>
-        <td class="px-4 py-3 text-gray-500">{{ $d->peminjaman->buku->isbn ?? '-' }}</td>
-        <td class="px-4 py-3">Rp {{ $d->total_denda }}</td>
-    </tr>
-    @endforeach
-    </table>
 
     @elseif($jenis == 'buku')
 
@@ -270,7 +259,7 @@
         <td class="px-4 py-3 border border-gray-200 text-gray-500">{{ $p->buku->isbn ?? '-' }}</td>
         <td class="px-4 py-3 border border-gray-200">{{ $p->tanggal_kembali }}</td>
         <td class="px-4 py-3 border border-gray-200">
-            @if($p->denda)
+            @if($p->denda && is_object($p->denda))
                 @if($p->denda->status == 'lunas')
                     <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-700">Lunas</span>
                 @else
@@ -321,10 +310,11 @@
     @endif
 
     <div class="mt-6">
-       <button onclick="window.print()" 
-            class="inline-flex items-center gap-2 px-5 py-2.5 text-white text-sm font-semibold rounded-lg shadow-md transition-colors" style="background-color: #166534;">
+        <button onclick="window.print()" 
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-white text-sm font-semibold rounded-lg shadow-md transition-colors"
+            style="background-color: #166534;">
             🖨️ Cetak Laporan
-       </button>
+        </button>
     </div>
 
     @endif
