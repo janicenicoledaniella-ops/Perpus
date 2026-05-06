@@ -9,13 +9,17 @@ use Illuminate\Support\Facades\Auth;
 class DendaController extends Controller
 {
     public function index()
-    {
-        $dendas = Denda::with('peminjaman.buku')
-            ->where('user_id', Auth::id())
-            ->get();
+{
+    $dendas = \App\Models\Denda::with('peminjaman.buku')
+        ->where('user_id', Auth::id())
+        ->where('total_denda', '>', 0) // ✅ hanya yang ada dendanya
+        ->whereHas('peminjaman', function ($q) {
+            $q->whereNotNull('tanggal_kembali'); // ✅ hanya yang sudah dikembalikan
+        })
+        ->get();
 
-        return view('denda.index', compact('dendas'));
-    }
+    return view('denda.index', compact('dendas'));
+}
 
     public function detail(int $id)
 {
