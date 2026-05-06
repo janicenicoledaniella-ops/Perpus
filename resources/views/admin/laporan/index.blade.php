@@ -247,7 +247,6 @@
         <th class="px-4 py-3 text-left border border-gray-300">Judul Buku</th>
         <th class="px-4 py-3 text-left border border-gray-300">ISBN</th>
         <th class="px-4 py-3 text-left border border-gray-300">Tanggal Kembali</th>
-        <th class="px-4 py-3 text-left border border-gray-300">Status</th>
     </tr>
     </thead>
     <tbody>
@@ -258,57 +257,108 @@
         <td class="px-4 py-3 border border-gray-200">{{ $p->buku->judul ?? '-' }}</td>
         <td class="px-4 py-3 border border-gray-200 text-gray-500">{{ $p->buku->isbn ?? '-' }}</td>
         <td class="px-4 py-3 border border-gray-200">{{ $p->tanggal_kembali }}</td>
-        <td class="px-4 py-3 border border-gray-200">
-            @if($p->denda && is_object($p->denda))
-                @if($p->denda->status == 'lunas')
-                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-700">Lunas</span>
-                @else
-                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-700">Belum Lunas</span>
-                @endif
-            @else
-                <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-gray-100 text-gray-500">Tidak Ada Denda</span>
-            @endif
-        </td>
+
     </tr>
     @endforeach
     </tbody>
     </table>
     </div>
 
-    @elseif($jenis == 'denda')
+   @elseif($jenis == 'denda')
 
-    <h2 class="text-xl font-bold text-gray-800 mb-4">Laporan Denda</h2>
+<h2 class="text-xl font-bold text-gray-800 mb-4">Laporan Denda</h2>
 
-    @php $total = 0; @endphp
+@php
+    $lunas = $data->where('status', 'lunas');
+    $belum = $data->where('status', 'belum_bayar');
+@endphp
 
-    <div class="overflow-x-auto rounded-xl border-2 border-gray-300">
-    <table class="min-w-full text-sm text-gray-700 border-collapse">
-    <thead class="bg-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-    <tr>
-        <th class="px-4 py-3 text-left border border-gray-300">Nama</th>
-        <th class="px-4 py-3 text-left border border-gray-300">ID</th>
-        <th class="px-4 py-3 text-left border border-gray-300">Total Denda</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($data as $d)
-    <tr class="hover:bg-gray-50 transition-colors">
-        <td class="px-4 py-3 border border-gray-200">{{ $d->user->name }}</td>
-        <td class="px-4 py-3 border border-gray-200 text-gray-500">{{ explode('@', $d->user->email)[0] }}</td>
-        <td class="px-4 py-3 border border-gray-200">Rp {{ $d->total_denda }}</td>
-    </tr>
-    @php $total += $d->total_denda; @endphp
-    @endforeach
-    <tr class="bg-gray-50 font-semibold text-gray-800">
-        <td class="px-4 py-3 border border-gray-300" colspan="2">Total Keseluruhan</td>
-        <td class="px-4 py-3 border border-gray-300">Rp {{ $total }}</td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
+{{-- ================== BELUM BAYAR ================== --}}
+<h3 class="text-lg font-semibold text-red-600 mb-2">Belum Bayar</h3>
 
-    @endif
+<div class="overflow-x-auto rounded-xl border-2 border-red-300 mb-6">
+<table class="min-w-full text-sm text-gray-700 border-collapse">
+<thead class="bg-red-100 text-xs font-semibold uppercase">
+<tr>
+    <th class="px-4 py-3 border">Nama</th>
+    <th class="px-4 py-3 border">ID</th>
+    <th class="px-4 py-3 border">Judul Buku</th>
+    <th class="px-4 py-3 border">ISBN</th>
+    <th class="px-4 py-3 border">Tanggal Kembali</th>
+    <th class="px-4 py-3 border">Denda</th>
+</tr>
+</thead>
+<tbody>
 
+@forelse($belum as $d)
+<tr>
+    <td class="px-4 py-3 border">{{ $d->user->name }}</td>
+    <td class="px-4 py-3 border">{{ explode('@', $d->user->email)[0] }}</td>
+    <td class="px-4 py-3 border">{{ $d->peminjaman->buku->judul ?? '-' }}</td>
+    <td class="px-4 py-3 border">{{ $d->peminjaman->buku->isbn ?? '-' }}</td>
+    <td class="px-4 py-3 border">
+        {{ $d->peminjaman->tanggal_kembali ?? '-' }}
+    </td>
+    <td class="px-4 py-3 border text-red-600">
+        Rp {{ number_format($d->total_denda) }}
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="5" class="text-center py-3 text-gray-500">
+        Tidak ada denda belum dibayar
+    </td>
+</tr>
+@endforelse
+
+</tbody>
+</table>
+</div>
+
+
+{{-- ================== LUNAS ================== --}}
+<h3 class="text-lg font-semibold text-green-600 mb-2">Sudah Lunas</h3>
+
+<div class="overflow-x-auto rounded-xl border-2 border-green-300">
+<table class="min-w-full text-sm text-gray-700 border-collapse">
+<thead class="bg-green-100 text-xs font-semibold uppercase">
+<tr>
+    <th class="px-4 py-3 border">Nama</th>
+    <th class="px-4 py-3 border">ID</th>
+    <th class="px-4 py-3 border">Judul Buku</th>
+    <th class="px-4 py-3 border">ISBN</th>
+    <th class="px-4 py-3 border">Tanggal Kembali </th>
+    <th class="px-4 py-3 border">Denda</th>
+</tr>
+</thead>
+<tbody>
+
+@forelse($lunas as $d)
+<tr>
+    <td class="px-4 py-3 border">{{ $d->user->name }}</td>
+    <td class="px-4 py-3 border">{{ explode('@', $d->user->email)[0] }}</td>
+    <td class="px-4 py-3 border">{{ $d->peminjaman->buku->judul ?? '-' }}</td>
+    <td class="px-4 py-3 border">{{ $d->peminjaman->buku->isbn ?? '-' }}</td>
+    <td class="px-4 py-3 border">
+        {{ $d->peminjaman->tanggal_kembali ?? '-' }}
+    </td>
+    <td class="px-4 py-3 border text-green-600">
+        Rp {{ number_format($d->total_denda) }}
+    </td>
+</tr>
+@empty
+<tr>
+    <td colspan="5" class="text-center py-3 text-gray-500">
+        Tidak ada denda lunas
+    </td>
+</tr>
+@endforelse
+
+</tbody>
+</table>
+</div>
+
+@endif
     <div class="mt-6">
         <button onclick="window.print()" 
             class="inline-flex items-center gap-2 px-5 py-2.5 text-white text-sm font-semibold rounded-lg shadow-md transition-colors"

@@ -33,7 +33,9 @@ class PeminjamanController extends Controller
         })->count();
 
         $denda = 0;
-
+       $denda += \App\Models\Denda::where('user_id', Auth::id())
+    ->where('status', 'belum_bayar')
+    ->sum('total_denda');
         foreach ($query->get() as $item) {
             $jatuhTempo = Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay();
             $sekarang   = now()->startOfDay();
@@ -178,7 +180,42 @@ public function ambilBuku(int $id)
     ->with('success', 'Buku berhasil dipinjam')
     ->with('active_tab', 'peminjaman'); // ⛔ INI KUNCI
 }
+public function kembalikan(int $id)
+{
+    $peminjaman = Peminjaman::with('buku')->findOrFail($id);
 
+    $tanggalKembali = now();
+    $jatuhTempo = Carbon::parse($peminjaman->tanggal_jatuh_tempo)->startOfDay();
+    $sekarang = $tanggalKembali->copy()->startOfDay();
+
+    // Update status peminjaman
+    $peminjaman->update([
+        'status' => 'dikembalikan',
+        'tanggal_kembali' => $tanggalKembali,
+    ]);
+
+    // Kembalikan stok buku
+    if ($peminjaman->buku) {
+        $peminjaman->buku->increment('stok');
+    }
+
+    // Hitung denda jika terlambat
+    if ($sekarang->gt($jatuhTempo)) {
+        $hari = $jatuhTempo->diffInDays($sekarang);
+        $hari = max($hari, 1);
+        $totalDenda = $hari * 1000;
+
+        \App\Models\Denda::create([
+            'user_id'               => $peminjaman->user_id,
+            'peminjaman_id'         => $peminjaman->id,
+            'jumlah_hari_terlambat' => $hari,
+            'total_denda'           => $totalDenda,
+            'status'                => 'belum_bayar',
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Buku berhasil dikembalikan');
+}
 public function hasil(int $id)
 {
     $data = Peminjaman::with('user','buku')->findOrFail($id);

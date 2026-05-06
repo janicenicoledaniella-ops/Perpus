@@ -38,19 +38,20 @@ class PengembalianController extends Controller
         $terlambat = max(1, $batas->diffInDays($today)); // ❗ anti minus
     $denda = max(0, $terlambat * 1000);              // ❗ anti minus
 
-
-        Denda::create([
-            'user_id' => $pinjam->user_id,
-            'peminjaman_id' => $pinjam->id,
-            'jumlah_hari_terlambat' => $terlambat,
-            'total_denda' => $denda,
-            'status' => 'belum_bayar'
-        ]);
+if ($denda > 0) {
+    Denda::create([
+        'user_id' => $pinjam->user_id,
+        'peminjaman_id' => $pinjam->id,
+        'jumlah_hari_terlambat' => $terlambat,
+        'total_denda' => $denda,
+        'status' => 'belum_bayar'
+    ]);
+}
     }
 
     $pinjam->update([
         'status' => 'dikembalikan',
-        'tanggal_kembali' => $today
+        'tanggal_kembali' => now()
     ]);
 
     $pinjam->buku->increment('stok');

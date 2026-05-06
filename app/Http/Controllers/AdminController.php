@@ -296,8 +296,8 @@ class AdminController extends Controller
     }
 
     if ($jenis == 'pengembalian') {
-        $query = \App\Models\Peminjaman::with('user','buku');
-
+        $query = \App\Models\Peminjaman::with('user','buku')
+        ->where('status', 'dikembalikan');
         if ($dari && $sampai) {
             $query->whereBetween('tanggal_kembali', [$dari, $sampai]);
         }
@@ -328,6 +328,7 @@ class AdminController extends Controller
         ->get();
 
     $pengembalian = \App\Models\Peminjaman::with('user','buku')
+        ->where('status', 'dikembalikan')
         ->when($dari && $sampai, function ($q) use ($dari, $sampai) {
             $q->whereBetween('tanggal_kembali', [$dari, $sampai]);
         })

@@ -82,7 +82,7 @@ class UserController extends Controller
 
     // 🔥 INI YANG PENTING (DENDA)
     $denda = 0;
-
+$denda += Denda::where('user_id', $userId)->sum('total_denda');
 $peminjaman = Peminjaman::where('user_id', $userId)
     ->where('status', 'dipinjam')
     ->get();
