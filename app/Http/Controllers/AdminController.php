@@ -275,53 +275,79 @@ class AdminController extends Controller
     public function laporanFilter(Request $request)
 {
     $jenis = $request->jenis;
+    $dari = $request->dari;
+    $sampai = $request->sampai;
 
-    if ($jenis == 'semua') {
-        return view('admin.laporan.index', [
-            'bukus' => Buku::all(),
-
-            'peminjaman' => Peminjaman::with('user','buku')->get(),
-
-            // ✅ HANYA YANG SUDAH DIKEMBALIKAN
-            'pengembalian' => Peminjaman::with('user','buku','denda')
-                ->where('status', 'dikembalikan')
-                ->get(),
-
-            // ✅ HANYA DENDA YANG SUDAH LUNAS
-            'denda' => Denda::with('user','peminjaman.buku')
-                ->where('status','lunas')
-                ->where('total_denda','>',0)
-                ->get(),
-
-            'jenis' => 'semua'
-        ]);
-    }
-
-    // =========================
-
+    // 🔥 default semua data
     if ($jenis == 'buku') {
-        $data = Buku::all();
-    } 
-
-    elseif ($jenis == 'peminjaman') {
-        $data = Peminjaman::with('user','buku')->get();
-    } 
-
-    elseif ($jenis == 'pengembalian') {
-
-        $data = Peminjaman::with('user','buku','denda')
-            ->where('status', 'dikembalikan')
-            ->get();
-    } 
-
-    elseif ($jenis == 'denda') {
-
-        $data = Denda::with('user','peminjaman.buku')
-            ->where('status','lunas') // 🔥 WAJIB
-            ->where('total_denda','>',0)
-            ->get();
+        $data = \App\Models\Buku::all();
+        return view('admin.laporan.index', compact('data', 'jenis'));
     }
 
-    return view('admin.laporan.index', compact('data','jenis'));
+    if ($jenis == 'peminjaman') {
+        $query = \App\Models\Peminjaman::with('user','buku');
+
+        // ✅ FILTER TANGGAL
+        if ($dari && $sampai) {
+            $query->whereBetween('tanggal_pinjam', [$dari, $sampai]);
+        }
+
+        $data = $query->get();
+
+        return view('admin.laporan.index', compact('data', 'jenis'));
+    }
+
+    if ($jenis == 'pengembalian') {
+        $query = \App\Models\Peminjaman::with('user','buku');
+
+        if ($dari && $sampai) {
+            $query->whereBetween('tanggal_kembali', [$dari, $sampai]);
+        }
+
+        $data = $query->get();
+
+        return view('admin.laporan.index', compact('data', 'jenis'));
+    }
+
+    if ($jenis == 'denda') {
+        $query = \App\Models\Denda::with('user');
+
+        if ($dari && $sampai) {
+            $query->whereBetween('created_at', [$dari, $sampai]);
+        }
+
+        $data = $query->get();
+
+        return view('admin.laporan.index', compact('data', 'jenis'));
+    }
+
+    // 🔥 kalau pilih semua
+    $bukus = \App\Models\Buku::all();
+
+    $peminjaman = \App\Models\Peminjaman::with('user','buku')
+        ->when($dari && $sampai, function ($q) use ($dari, $sampai) {
+            $q->whereBetween('tanggal_pinjam', [$dari, $sampai]);
+        })
+        ->get();
+
+    $pengembalian = \App\Models\Peminjaman::with('user','buku')
+        ->when($dari && $sampai, function ($q) use ($dari, $sampai) {
+            $q->whereBetween('tanggal_kembali', [$dari, $sampai]);
+        })
+        ->get();
+
+    $denda = \App\Models\Denda::with('user')
+        ->when($dari && $sampai, function ($q) use ($dari, $sampai) {
+            $q->whereBetween('created_at', [$dari, $sampai]);
+        })
+        ->get();
+
+    return view('admin.laporan.index', compact(
+        'jenis',
+        'bukus',
+        'peminjaman',
+        'pengembalian',
+        'denda'
+    ));
 }
 }
