@@ -10,13 +10,9 @@ class DendaController extends Controller
 {
     public function index()
 {
-    $dendas = \App\Models\Denda::with('peminjaman.buku')
-        ->where('user_id', Auth::id())
-        ->where('total_denda', '>', 0) // ✅ hanya yang ada dendanya
-        ->whereHas('peminjaman', function ($q) {
-            $q->whereNotNull('tanggal_kembali'); // ✅ hanya yang sudah dikembalikan
-        })
-        ->get();
+    $dendas = Denda::with('peminjaman.buku')
+            ->where('user_id', Auth::id())
+            ->get();
 
     return view('denda.index', compact('dendas'));
 }

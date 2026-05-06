@@ -91,7 +91,7 @@
         </a>
 
         <a href="{{ route('booking.index') }}"
-            class="bg-purple-500 hover:bg-purple-600 text-white px-5 py-2 rounded-lg">
+            class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg">
             Lihat Booking Buku
         </a>
 
