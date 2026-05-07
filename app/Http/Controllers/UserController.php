@@ -80,7 +80,7 @@ class UserController extends Controller
         ->where('tanggal_jatuh_tempo', '<', now())
         ->count();
 
-    // 🔥 INI YANG PENTING (DENDA)
+    
     $denda = 0;
 $denda += Denda::where('user_id', $userId)->sum('total_denda');
 $peminjaman = Peminjaman::where('user_id', $userId)

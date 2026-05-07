@@ -26,7 +26,7 @@ class PengembalianController extends Controller
         return back()->with('error', 'Buku sudah dikembalikan');
     }
 
-    // 🔥 PENTING: samakan ke awal hari
+    
     $today = now()->startOfDay();
     $batas = \Carbon\Carbon::parse($pinjam->tanggal_jatuh_tempo)->startOfDay();
 
@@ -35,9 +35,8 @@ class PengembalianController extends Controller
 
     if ($today->gt($batas)) {
 
-        $terlambat = max(1, $batas->diffInDays($today)); // ❗ anti minus
-    $denda = max(0, $terlambat * 1000);              // ❗ anti minus
-
+        $terlambat = max(1, $batas->diffInDays($today)); 
+    $denda = max(0, $terlambat * 1000);              
 if ($denda > 0) {
     Denda::create([
         'user_id' => $pinjam->user_id,

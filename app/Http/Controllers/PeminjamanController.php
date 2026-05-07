@@ -180,10 +180,10 @@ public function ambilBuku(int $id)
         'status' => 'dipinjam'
     ]);
 
-    // 👉 PINDAH KE HALAMAN BARU
+    
     return redirect()->back()
     ->with('success', 'Buku berhasil dipinjam')
-    ->with('active_tab', 'peminjaman'); // ⛔ INI KUNCI
+    ->with('active_tab', 'peminjaman'); 
 }
 public function kembalikan(int $id)
 {
