@@ -53,7 +53,7 @@ class PeminjamanController extends Controller
         ->where('tanggal_booking', '<', now()->toDateString())
         ->count();
 
-        return view('mahasiswa.dashboard', compact('data', 'total', 'telat', 'denda'));
+       return view('mahasiswa.dashboard', compact('data', 'total', 'telat', 'denda', 'bookingTerlambat'));
     }
 
     public function dashboardDosen()
