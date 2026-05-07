@@ -5,7 +5,7 @@
 
 <div class="max-w-5xl mx-auto py-6">
 
-    {{-- ✅ ALERT DI PALING ATAS --}}
+   
     @if(session('success'))
         <div class="bg-green-500 text-white p-3 rounded mb-4">
             {{ session('success') }}
@@ -94,7 +94,7 @@
 
     <h2 class="text-xl font-semibold mb-3">Buku Sedang Dipinjam</h2>
 
-    {{-- 🔘 TOMBOL --}}
+   
     <div class="mb-4 flex gap-3">
         <button onclick="showPinjam()" 
             class="bg-blue-500 text-white px-4 py-2 rounded">
@@ -107,7 +107,6 @@
         </button>
     </div>
 
-    {{-- 🧾 FORM PINJAM --}}
     <div id="formPinjam" class="hidden bg-white p-6 rounded shadow mb-4 max-w-4xl">
 
         <h3 class="text-xl font-bold mb-3">Peminjaman</h3>
@@ -139,7 +138,7 @@
 
     </div>
 
-    {{-- 📊 TABEL --}}
+   
     <div id="tabelPeminjaman" class="hidden bg-white shadow rounded p-4">
         <table class="w-full border">
             <thead class="bg-gray-100">
@@ -219,7 +218,7 @@ menu.addEventListener('change', function () {
     }
 });
 
-// 🔥 tombol
+
 function showPinjam() {
     document.getElementById('formPinjam').classList.remove('hidden');
     document.getElementById('tabelPeminjaman').classList.add('hidden');

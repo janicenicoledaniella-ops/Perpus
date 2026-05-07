@@ -13,7 +13,7 @@ public function index()
 {
     $booking = Peminjaman::with('buku')
         ->where('user_id',  Auth::id())
-        ->where('status', 'booking') // ⛔ INI KUNCI
+        ->where('status', 'booking') 
         ->latest()
         ->get();
 

@@ -5,7 +5,7 @@
 
     <h2 class="text-2xl font-bold mb-6">Dashboard Saya</h2>
 
-    {{-- 🔢 RINGKASAN --}}
+    
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
         <div class="bg-white p-6 rounded-2xl shadow text-center border-l-4 border-blue-500">
@@ -27,20 +27,19 @@
 
     </div>
 
-    {{-- ⚠️ ALERT DENDA --}}
     @if($denda > 0)
     <div class="bg-red-100 border border-red-300 text-red-700 p-4 rounded mb-6">
         ⚠️ Kamu memiliki denda yang belum dibayar!
     </div>
     @endif
-    {{-- ⚠️ ALERT BOOKING BELUM DIAMBIL --}}
+    
     @if($bookingTerlambat > 0)
     <div class="bg-yellow-100 border border-yellow-300 text-yellow-700 p-4 rounded mb-6">
         ⚠️ Kamu memiliki <strong>{{ $bookingTerlambat }} buku</strong> yang belum diambil dan sudah melewati tanggal pengambilan!
     </div>
     @endif
 
-    {{-- 📚 BUKU DIPINJAM --}}
+    
     <h3 class="text-xl font-bold mb-4">Buku Dipinjam</h3>
 
     @if($data->isEmpty())
@@ -88,7 +87,7 @@
 
     </div>
 
-    {{-- 🔗 ACTION --}}
+   
     <div class="mt-8 flex gap-4">
 
         <a href="{{ route('peminjaman.index') }}"
