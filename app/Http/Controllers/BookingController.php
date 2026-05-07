@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Peminjaman; 
-
+use Illuminate\Support\Facades\Auth;
 class BookingController extends Controller
 {
 
 public function index()
 {
     $booking = Peminjaman::with('buku')
-        ->where('user_id', auth()->id())
+        ->where('user_id',  Auth::id())
         ->where('status', 'booking') // ⛔ INI KUNCI
         ->latest()
         ->get();
@@ -20,10 +20,10 @@ public function index()
     return view('booking.index', compact('booking'));
 }
 
-    public function store($buku_id)
+    public function store(string $buku_id)
 {
     Booking::create([
-        'user_id' => auth()->id(),
+        'user_id' =>  Auth::id(),
         'buku_id' => $buku_id,
         'tanggal_booking' => now(),
         'status' => 'menunggu'
@@ -31,4 +31,5 @@ public function index()
 
     return back()->with('success', 'Berhasil booking');
 }
+
 }

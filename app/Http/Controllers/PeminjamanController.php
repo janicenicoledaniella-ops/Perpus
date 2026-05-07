@@ -48,6 +48,11 @@ class PeminjamanController extends Controller
 
         $data = $query->latest()->take(3)->get();
 
+        $bookingTerlambat = Peminjaman::where('user_id', Auth::id())
+        ->where('status', 'booking')
+        ->where('tanggal_booking', '<', now()->toDateString())
+        ->count();
+
         return view('mahasiswa.dashboard', compact('data', 'total', 'telat', 'denda'));
     }
 

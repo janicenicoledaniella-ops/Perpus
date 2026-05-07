@@ -33,6 +33,12 @@
         ⚠️ Kamu memiliki denda yang belum dibayar!
     </div>
     @endif
+    {{-- ⚠️ ALERT BOOKING BELUM DIAMBIL --}}
+    @if($bookingTerlambat > 0)
+    <div class="bg-yellow-100 border border-yellow-300 text-yellow-700 p-4 rounded mb-6">
+        ⚠️ Kamu memiliki <strong>{{ $bookingTerlambat }} buku</strong> yang belum diambil dan sudah melewati tanggal pengambilan!
+    </div>
+    @endif
 
     {{-- 📚 BUKU DIPINJAM --}}
     <h3 class="text-xl font-bold mb-4">Buku Dipinjam</h3>
