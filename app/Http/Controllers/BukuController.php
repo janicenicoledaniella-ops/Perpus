@@ -41,7 +41,7 @@ class BukuController extends Controller
     return redirect('/buku')->with('success', 'Data berhasil ditambahkan');
     
     }
-
+ 
     public function edit($id)
     {
         $data = Buku::findOrFail($id);
