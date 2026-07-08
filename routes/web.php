@@ -77,7 +77,7 @@ Route::middleware(['auth'])->prefix('mahasiswa')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN (INI YANG SUDAH FIX)
+| ADMIN 
 |--------------------------------------------------------------------------
 */
 
@@ -93,7 +93,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/ambil/{id}', [PeminjamanController::class, 'ambilBuku'])
         ->name('admin.ambil');
 
-    // 🔥 PINJAM MANUAL (WAJIB)
+    //  PINJAM MANUAL 
     Route::post('/peminjaman/manual', [PeminjamanController::class, 'pinjamManual'])
         ->name('admin.peminjaman.manual');
 

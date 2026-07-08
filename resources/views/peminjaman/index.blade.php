@@ -4,21 +4,21 @@
 
     <h2 class="text-xl font-bold mb-4">Buku yang Sedang Dipinjam</h2>
 
-    {{-- 🔴 Notif denda --}}
+   
     @if(session('success_denda'))
         <div style="background:red;color:white;padding:10px;margin-bottom:10px;">
             {{ session('success_denda') }}
         </div>
     @endif
 
-    {{-- 🟢 Notif sukses --}}
+    
     @if(session('success'))
         <div style="background:green;color:white;padding:10px;margin-bottom:10px;">
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- ❌ Error --}}
+    
     @if(session('error'))
         <div style="background:pink;padding:10px;margin-bottom:10px;">
             {{ session('error') }}
@@ -44,7 +44,7 @@
             <p>📅 Pinjam: {{ $item->tanggal_pinjam }}</p>
             <p>⏳ Jatuh Tempo: {{ $item->tanggal_jatuh_tempo }}</p>
 
-            {{-- 🔥 HITUNG DENDA MENIT --}}
+            
            @php
     $jatuhTempo = \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay();
     $sekarang   = now()->startOfDay();

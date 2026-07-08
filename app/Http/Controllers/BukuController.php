@@ -20,52 +20,48 @@ class BukuController extends Controller
 
     public function store(Request $request)
     {
-          $data = $request->only([
-        'judul',
-        'penulis',
-        'penerbit',
-        'tahun',
-        'isbn',
-        'kategori',
-        'stok',
-        'deskripsi'
-    ]);
+        $data = $request->only([
+            'judul',
+            'penulis',
+            'penerbit',
+            'tahun',
+            'isbn',
+            'kategori',
+            'stok',
+            'deskripsi'
+        ]);
 
-    if ($request->hasFile('cover')) {
-        $path = $request->file('cover')->store('covers', 'public');
-        $data['cover'] = $path;
+        if ($request->hasFile('cover')) {
+            $path = $request->file('cover')->store('covers', 'public');
+            $data['cover'] = $path;
+        }
+
+        Buku::create($data);
+
+        return redirect('/buku')->with('success', 'Data berhasil ditambahkan');
     }
 
-    Buku::create($data);
-
-    return redirect('/buku')->with('success', 'Data berhasil ditambahkan');
-    
-    }
- 
-    public function edit($id)
+    public function edit(int $id)
     {
         $data = Buku::findOrFail($id);
         return view('admin.buku.edit', compact('data'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $data = Buku::findOrFail($id);
         $data->update($request->all());
         return redirect('/buku')->with('success', 'Data berhasil diupdate');
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         Buku::destroy($id);
         return redirect('/buku')->with('success', 'Data berhasil dihapus');
     }
-    
-    public function show($id)
-    {
-    $buku = Buku::where('isbn',$id)->firstOrFail();
-    return view('katalog.detail', compact('buku'));
 
+    public function show(int $id)
+    {
         $buku = Buku::where('isbn', $id)->firstOrFail();
         return view('katalog.detail', compact('buku'));
     }

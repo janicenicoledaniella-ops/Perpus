@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Auth;
 class DendaController extends Controller
 {
     public function index()
-    {
-        $dendas = Denda::with('peminjaman.buku')
+{
+    $dendas = Denda::with('peminjaman.buku')
             ->where('user_id', Auth::id())
             ->get();
 
-        return view('denda.index', compact('dendas'));
-    }
+    return view('denda.index', compact('dendas'));
+}
 
     public function detail(int $id)
 {

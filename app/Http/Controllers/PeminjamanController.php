@@ -48,7 +48,12 @@ class PeminjamanController extends Controller
 
         $data = $query->latest()->take(3)->get();
 
-        return view('mahasiswa.dashboard', compact('data', 'total', 'telat', 'denda'));
+        $bookingTerlambat = Peminjaman::where('user_id', Auth::id())
+        ->where('status', 'booking')
+        ->where('tanggal_booking', '<', now()->toDateString())
+        ->count();
+
+       return view('mahasiswa.dashboard', compact('data', 'total', 'telat', 'denda', 'bookingTerlambat'));
     }
 
     public function dashboardDosen()
@@ -175,10 +180,10 @@ public function ambilBuku(int $id)
         'status' => 'dipinjam'
     ]);
 
-    // 👉 PINDAH KE HALAMAN BARU
+    
     return redirect()->back()
     ->with('success', 'Buku berhasil dipinjam')
-    ->with('active_tab', 'peminjaman'); // ⛔ INI KUNCI
+    ->with('active_tab', 'peminjaman'); 
 }
 public function kembalikan(int $id)
 {

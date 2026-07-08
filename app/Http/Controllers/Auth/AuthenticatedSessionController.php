@@ -23,7 +23,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
     
-        $email = auth()->user()->email;
+        $email = auth::user()->email;
 
         if (str_starts_with($email, '01')) {
             return redirect('/admin');
