@@ -85,8 +85,7 @@ class AdminController extends Controller
         $dosen = User::findOrFail($id);
         $dosen->update([
             'name' => $request->name,
-            'email' => '03'.$request->email.'@lecture.edu',
-            'password' => AffineHelper::encrypt($request->password)
+            'email' => '03'.$request->email.'@lecture.edu'
         ]);
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil diupdate');
     }
@@ -157,8 +156,7 @@ class AdminController extends Controller
         $mahasiswa = User::findOrFail($id);
         $mahasiswa->update([
             'name' => $request->name,
-            'email' => '04'.$request->email.'@student.edu',
-            'password' => AffineHelper::encrypt($request->password)
+            'email' => '04'.$request->email.'@student.edu'
         ]);
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil diupdate');
     }
