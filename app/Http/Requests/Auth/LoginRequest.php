@@ -27,26 +27,37 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    
     public function authenticate(): void
-    {
-        $this->ensureIsNotRateLimited();
+{
+    $this->ensureIsNotRateLimited();
 
-        $encryptedPassword = AffineHelper::encrypt($this->input('password'));
-        $user = User::where('email', $this->input('email'))->first();
-        if (!$user || $user->password !== $encryptedPassword) {
-            RateLimiter::hit($this->throttleKey());
+    $user = User::where('email', $this->input('email'))->first();
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
-        }
-        Auth::login($user, $this->boolean('remember'));
+    if (!$user) {
 
-        RateLimiter::clear($this->throttleKey());
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
     }
 
-   
+    $passwordDatabase = AffineHelper::decrypt($user->password);
+
+    if ($passwordDatabase !== $this->input('password')) {
+
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
+    }
+
+    Auth::login($user, $this->boolean('remember'));
+
+    RateLimiter::clear($this->throttleKey());
+}
+
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {

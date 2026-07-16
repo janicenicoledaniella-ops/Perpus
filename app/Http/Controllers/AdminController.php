@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\AffineHelper;
 use App\Models\User;
 use App\Models\Buku;
 use App\Models\Denda;
@@ -57,7 +58,7 @@ class AdminController extends Controller
         User::create([
             'name' => $request->name,
             'email' => '03'.$request->email.'@lecture.edu',
-            'password' => bcrypt($request->password)
+            'password' => AffineHelper::encrypt($request->password)
         ]);
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil ditambahkan');
     }
@@ -85,7 +86,7 @@ class AdminController extends Controller
         $dosen->update([
             'name' => $request->name,
             'email' => '03'.$request->email.'@lecture.edu',
-            'password' => bcrypt($request->password)
+            'password' => AffineHelper::encrypt($request->password)
         ]);
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil diupdate');
     }
@@ -128,7 +129,7 @@ class AdminController extends Controller
         User::create([
             'name' => $request->name,
             'email' => '04'.$request->email.'@student.edu',
-            'password' => bcrypt($request->password)
+            'password' => AffineHelper::encrypt($request->password)
         ]);
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil ditambahkan');
     }
@@ -157,7 +158,7 @@ class AdminController extends Controller
         $mahasiswa->update([
             'name' => $request->name,
             'email' => '04'.$request->email.'@student.edu',
-            'password' => bcrypt($request->password)
+            'password' => AffineHelper::encrypt($request->password)
         ]);
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil diupdate');
     }
