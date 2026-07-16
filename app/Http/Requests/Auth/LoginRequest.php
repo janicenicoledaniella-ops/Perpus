@@ -42,16 +42,16 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    $passwordDatabase = AffineHelper::decrypt($user->password);
+    $passwordEncrypt = AffineHelper::encrypt($this->input('password'));
 
-    if ($passwordDatabase !== $this->input('password')) {
+if ($user->password !== $passwordEncrypt) {
 
-        RateLimiter::hit($this->throttleKey());
+    RateLimiter::hit($this->throttleKey());
 
-        throw ValidationException::withMessages([
-            'email' => trans('auth.failed'),
-        ]);
-    }
+    throw ValidationException::withMessages([
+        'email' => trans('auth.failed'),
+    ]);
+}
 
     Auth::login($user, $this->boolean('remember'));
 
