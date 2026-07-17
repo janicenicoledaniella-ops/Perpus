@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
-use App\Helpers\AffineHelper;
+use App\Helpers\Affine;
 
 class PasswordController extends Controller
 {
@@ -23,7 +23,7 @@ class PasswordController extends Controller
     $user = $request->user();
 
     // Cek password lama
-    if (AffineHelper::decrypt($user->password) !== $validated['current_password']) {
+    if (Affine::decrypt($user->password) !== $validated['current_password']) {
         return back()->withErrors([
             'current_password' => 'Password lama salah.',
         ], 'updatePassword');
@@ -31,7 +31,7 @@ class PasswordController extends Controller
 
     // Simpan password baru dalam bentuk terenkripsi
     $user->update([
-        'password' => AffineHelper::encrypt($validated['password']),
+        'password' => Affine::encrypt($validated['password']),
     ]);
 
     return back()->with('status', 'password-updated');

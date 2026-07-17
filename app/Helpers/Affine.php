@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-class AffineHelper
+class Affine
 {
     private static int $keyMul = 7;   
     private static int $keyAdd = 3;   

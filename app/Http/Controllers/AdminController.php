@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Helpers\AffineHelper;
+use App\Helpers\Affine;
 use App\Models\User;
 use App\Models\Buku;
 use App\Models\Denda;
@@ -58,7 +58,7 @@ class AdminController extends Controller
         User::create([
             'name' => $request->name,
             'email' => '03'.$request->email.'@lecture.edu',
-            'password' => AffineHelper::encrypt($request->password)
+            'password' => Affine::encrypt($request->password)
         ]);
         return redirect()->route('admin.dosen.index')->with('success', 'Dosen berhasil ditambahkan');
     }
@@ -128,7 +128,7 @@ class AdminController extends Controller
         User::create([
             'name' => $request->name,
             'email' => '04'.$request->email.'@student.edu',
-            'password' => AffineHelper::encrypt($request->password)
+            'password' => Affine::encrypt($request->password)
         ]);
         return redirect()->route('admin.mahasiswa.index')->with('success', 'Mahasiswa berhasil ditambahkan');
     }

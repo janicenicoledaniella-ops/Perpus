@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Helpers\AffineHelper;
+use App\Helpers\Affine;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -42,7 +42,7 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    $passwordDatabase = AffineHelper::decrypt($user->password);
+    $passwordDatabase = Affine::decrypt($user->password);
 
     if ($passwordDatabase !== $this->input('password')) {
 
