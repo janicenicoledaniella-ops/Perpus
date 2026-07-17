@@ -14,8 +14,9 @@ class Affine
     {
         $cipher = '';
         for ($i = 0; $i < strlen($plain); $i++) {
+            //affine
             $c = (self::$keyMul * ord($plain[$i]) + self::$keyAdd) % self::$keyMod;
-           
+           //xor
             $c = $c ^ self::$keyXor;
             $cipher .= chr($c);
         }
@@ -29,13 +30,14 @@ class Affine
         $ori = '';
 
         for ($i = 0; $i < strlen($cipher); $i++) {
+            //xor
             $c = ord($cipher[$i]) ^ self::$keyXor;
-
+            //affine
             $m = $c - self::$keyAdd;
             while ($m < 0) {
                 $m += self::$keyMod;
             }
-
+            
             $inv = 0;
             $j   = 0;
             $r   = 0;
